@@ -49,7 +49,10 @@ const DemoAuth = {
 const Auth = {
     getCurrentUser() {
         if (IS_DEMO) return DemoAuth.getCurrentUser();
-        return firebaseAuth.currentUser;
+        // For real Firebase: check sessionStorage cache first (instant)
+        // firebaseAuth.currentUser may be null before onAuthStateChanged fires
+        const cached = localStorage.getItem('skillify_fb_user');
+        return cached ? JSON.parse(cached) : null;
     },
 
     async register(email, password, name) {
@@ -59,24 +62,31 @@ const Auth = {
         }
         const cred = await firebaseAuth.createUserWithEmailAndPassword(email, password);
         await cred.user.updateProfile({ displayName: name });
-        return { uid: cred.user.uid, email: cred.user.email, name, isNew: true };
+        const user = { uid: cred.user.uid, email: cred.user.email, name, isNew: true };
+        localStorage.setItem('skillify_fb_user', JSON.stringify(user));
+        return user;
     },
 
     async login(email, password) {
         if (IS_DEMO) return DemoAuth.login(email, password);
         const cred = await firebaseAuth.signInWithEmailAndPassword(email, password);
-        return { uid: cred.user.uid, email: cred.user.email, name: cred.user.displayName };
+        const user = { uid: cred.user.uid, email: cred.user.email, name: cred.user.displayName };
+        localStorage.setItem('skillify_fb_user', JSON.stringify(user));
+        return user;
     },
 
     async googleLogin() {
         if (IS_DEMO) return DemoAuth.googleLogin();
         const provider = new firebase.auth.GoogleAuthProvider();
         const result = await firebaseAuth.signInWithPopup(provider);
-        return result.user;
+        const user = { uid: result.user.uid, email: result.user.email, name: result.user.displayName };
+        localStorage.setItem('skillify_fb_user', JSON.stringify(user));
+        return user;
     },
 
     async logout() {
         if (IS_DEMO) return DemoAuth.logout();
+        localStorage.removeItem('skillify_fb_user');
         return firebaseAuth.signOut();
     },
 
@@ -92,7 +102,7 @@ const Auth = {
 const Profile = {
     async get(uid) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/profile/${uid}`);
+            const res = await fetch(`${BACKEND_URL}/profile/${uid}`);
             if (!res.ok) return null;
             return await res.json();
         } catch {
@@ -104,7 +114,7 @@ const Profile = {
 
     async save(data) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/profile`, {
+            const res = await fetch(`${BACKEND_URL}/profile`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
