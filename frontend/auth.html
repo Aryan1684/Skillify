@@ -46,7 +46,6 @@
             box-shadow: var(--shadow-glow);
         }
 
-        /* Tabs */
         .auth-tabs {
             display: flex;
             background: rgba(255, 255, 255, 0.04);
@@ -79,10 +78,6 @@
             gap: 1.1rem;
         }
 
-        .auth-form .hidden {
-            display: none !important;
-        }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -111,9 +106,7 @@
             border-color: var(--border-active);
         }
 
-        .google-icon {
-            font-size: 1.1rem;
-        }
+        .google-icon { font-size: 1.1rem; }
 
         .demo-notice {
             background: rgba(124, 58, 237, 0.08);
@@ -133,24 +126,11 @@
             color: var(--text-muted);
         }
 
-        .auth-footer a {
-            color: var(--violet-light);
-            font-weight: 600;
-        }
+        .auth-footer a { color: var(--violet-light); font-weight: 600; }
 
-        .back-home {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .back-home a {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .back-home a:hover {
-            color: var(--text-primary);
-        }
+        .back-home { text-align: center; margin-top: 1.5rem; }
+        .back-home a { font-size: 0.85rem; color: var(--text-muted); }
+        .back-home a:hover { color: var(--text-primary); }
 
         #loadingOverlay {
             position: fixed;
@@ -163,14 +143,8 @@
             backdrop-filter: blur(10px);
         }
 
-        .loading-box {
-            text-align: center;
-        }
-
-        .loading-box p {
-            margin-top: 1rem;
-            color: var(--text-secondary);
-        }
+        .loading-box { text-align: center; }
+        .loading-box p { margin-top: 1rem; color: var(--text-secondary); }
     </style>
 </head>
 
@@ -202,8 +176,8 @@
 
             <!-- Form -->
             <form class="auth-form mt-3" id="authForm" onsubmit="handleSubmit(event)">
-                <!-- Register-only fields -->
-                <div class="form-row" id="nameRow">
+                <!-- Register-only fields (hidden by default) -->
+                <div class="form-row" id="nameRow" style="display:none;">
                     <div class="form-group">
                         <label class="form-label">First Name</label>
                         <input type="text" class="form-input" id="firstName" placeholder="Arjun" />
@@ -224,7 +198,8 @@
                     <input type="password" class="form-input" id="password" placeholder="Min 6 characters" required />
                 </div>
 
-                <div class="form-group hidden" id="confirmRow">
+                <!-- Register-only (hidden by default) -->
+                <div class="form-group" id="confirmRow" style="display:none;">
                     <label class="form-label">Confirm Password</label>
                     <input type="password" class="form-input" id="confirmPassword" placeholder="Re-enter password" />
                 </div>
@@ -242,8 +217,7 @@
 
             <div class="auth-footer">
                 <span id="switchText">Don't have an account? </span>
-                <a href="#" onclick="switchTab(currentTab==='login'?'register':'login');" id="switchLink">Register
-                    here</a>
+                <a href="#" onclick="switchTab(currentTab==='login'?'register':'login');" id="switchLink">Register here</a>
             </div>
         </div>
 
@@ -278,7 +252,7 @@
             document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
             document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
             document.getElementById('nameRow').style.display = tab === 'register' ? 'grid' : 'none';
-            document.getElementById('confirmRow').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('confirmRow').style.display = tab === 'register' ? 'flex' : 'none';
             document.getElementById('submitBtn').textContent = tab === 'login' ? 'Login to Skillify' : 'Create Account';
             document.getElementById('switchText').textContent = tab === 'login' ? "Don't have an account? " : "Already have an account? ";
             document.getElementById('switchLink').textContent = tab === 'login' ? 'Register here' : 'Login';

@@ -86,8 +86,12 @@ const Auth = {
 
     async logout() {
         if (IS_DEMO) return DemoAuth.logout();
+        try {
+            await firebaseAuth.signOut();
+        } catch(e) { console.error('Logout error', e); }
         localStorage.removeItem('skillify_fb_user');
-        return firebaseAuth.signOut();
+        localStorage.removeItem('skillify_user');
+        return true;
     },
 
     requireAuth() {
