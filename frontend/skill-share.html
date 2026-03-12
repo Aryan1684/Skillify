@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skillify – Skill Share Community</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        .page-content {
+            padding-top: calc(var(--nav-h) + 2rem);
+            padding-bottom: 4rem;
+        }
+
+        .ss-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .ss-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        /* Post card */
+        .post-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+
+        .post-card:hover {
+            border-color: var(--border-active);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-meta {
+            flex: 1;
+        }
+
+        .post-meta .post-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .post-meta .post-time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .post-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-content {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .post-footer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .post-action {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: var(--transition);
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .post-action:hover {
+            color: var(--violet-light);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .post-type-badge {
+            font-size: 0.72rem;
+        }
+
+        /* Create post */
+        .create-post {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-compose {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .compose-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            resize: none;
+            font-family: inherit;
+        }
+
+        .compose-input:focus {
+            border-color: var(--violet);
+            outline: none;
+        }
+
+        .compose-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Sidebar */
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-card h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .topic-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.83rem;
+        }
+
+        .topic-chip:last-child {
+            border-bottom: none;
+        }
+
+        .topic-chip a {
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .topic-chip a:hover {
+            color: var(--violet-light);
+        }
+
+        .topic-count {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(124, 58, 237, 0.15);
+            border-color: var(--violet);
+            color: #a78bfa;
+        }
+
+        /* Replies */
+        .reply-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .reply-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .reply-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            padding: 0.6rem 0.9rem;
+            font-size: 0.85rem;
+        }
+
+        .reply-content strong {
+            font-size: 0.8rem;
+            color: var(--violet-light);
+        }
+
+        .reply-input-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .reply-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.5rem 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .reply-input:focus {
+            border-color: var(--violet);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">✦ Skillify</a>
+        <div class="nav-links">
+            <a href="skill-share.html" class="active">Community</a>
+            <a href="borrow.html">Borrow</a>
+            <a href="learn.html">Learn</a>
+            <a href="test.html">🏅 Quiz</a>
+            <a href="dashboard.html" class="btn btn-glass btn-sm">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <h1 style="font-size:1.6rem;">🤝 Skill Share <span class="badge badge-free"
+                            style="vertical-align:middle;">FREE</span></h1>
+                    <p class="txt-muted txt-sm">Ask questions, share tips, and learn from the community.</p>
+                </div>
+                <div class="flex gap-1">
+                    <input class="form-input" id="searchInput" placeholder="🔍 Search posts..." style="width:200px;"
+                        oninput="filterPosts()" />
+                </div>
+            </div>
+
+            <div class="ss-layout">
+                <!-- Main feed -->
+                <div>
+                    <!-- Create post -->
+                    <div class="create-post">
+                        <div class="post-compose">
+                            <div class="avatar" id="composeAvatar">U</div>
+                            <div style="flex:1;">
+                                <textarea class="compose-input" id="postContent" rows="2"
+                                    placeholder="Share a skill tip, ask a question, or start a discussion..."></textarea>
+                                <div class="compose-actions">
+                                    <input class="form-input" id="postTitle" placeholder="Post title (required)"
+                                        style="flex:1;min-width:150px;" />
+                                    <select class="form-input form-select" id="postSkill" style="width:140px;">
+                                        <option value="">Any Skill</option>
+                                        <option value="python">🐍 Python</option>
+                                        <option value="javascript">⚡ JavaScript</option>
+                                        <option value="react">⚛️ React</option>
+                                        <option value="design">🎨 UI/UX</option>
+                                        <option value="data_science">📊 Data Science</option>
+                                        <option value="machine_learning">🤖 ML/AI</option>
+                                        <option value="java">☕ Java</option>
+                                        <option value="marketing">📈 Marketing</option>
+                                        <option value="general">💬 General</option>
+                                    </select>
+                                    <select class="form-input form-select" id="postType" style="width:120px;">
+                                        <option value="share">💡 Tip</option>
+                                        <option value="question">❓ Question</option>
+                                        <option value="resource">🔗 Resource</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm" onclick="createPost()">Post</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter bar -->
+                    <div class="filter-bar">
+                        <button class="filter-btn active" onclick="setFilter('all',this)">All Posts</button>
+                        <button class="filter-btn" onclick="setFilter('question',this)">❓ Questions</button>
+                        <button class="filter-btn" onclick="setFilter('share',this)">💡 Tips</button>
+                        <button class="filter-btn" onclick="setFilter('resource',this)">🔗 Resources</button>
+                    </div>
+
+                    <!-- Posts -->
+                    <div id="postsContainer">
+                        <div class="txt-center" style="padding:3rem 0; color:var(--text-muted);">
+                            <div class="loader" style="margin:0 auto 1rem;"></div>
+                            <p>Loading posts...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="sidebar-card">
+                        <h4>🔥 Trending Topics</h4>
+                        <div class="topic-chip"><a onclick="searchByTopic('python')">🐍 Python Basics</a><span
+                                class="topic-count">124 posts</span></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('react')">⚛️ React Hooks</a><span
+                                class="topic-count">98 posts</span></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('machine_learning')">🤖 ML Projects</a><span
+                                class="topic-count">76 posts</span></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('design')">🎨 UI Design Tips</a><span
+                                class="topic-count">62 posts</span></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('javascript')">⚡ JS Interview Prep</a><span
+                                class="topic-count">55 posts</span></div>
+                    </div>
+                    <div class="sidebar-card">
+                        <h4>📌 Community Rules</h4>
+                        <ul
+                            style="font-size:0.82rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.4rem;">
+                            <li>✅ Be helpful and respectful</li>
+                            <li>✅ Share verified knowledge</li>
+                            <li>✅ Ask specific questions</li>
+                            <li>❌ No spam or self-promotion</li>
+                            <li>❌ No plagiarism</li>
+                        </ul>
+                    </div>
+                    <a href="test.html" class="sidebar-card"
+                        style="display:block;text-align:center;cursor:pointer;border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.08);">
+                        <div style="font-size:2rem;margin-bottom:0.5rem;">🏅</div>
+                        <strong>Get Verified!</strong>
+                        <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.3rem;">Verified users get 3x
+                            more visibility.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let user, userProfile, allPosts = [], activeFilter = 'all';
+
+        const DEMO_POSTS = [
+            { id: 'p1', author: 'Priya S.', avatar: 'P', skill: 'python', type: 'share', title: '🐍 Python List Comprehensions - A Complete Guide', content: 'List comprehensions are one of the most powerful Python features. Instead of writing a for loop, you can write: `[x*2 for x in range(10)]`. They\'re faster and more readable!', likes: 42, replies: [{ author: 'Rahul M.', content: 'Great tip! Also works for nested loops: `[[col for col in row] for row in matrix]`' }], created_at: new Date(Date.now() - 3600000).toISOString() },
+            { id: 'p2', author: 'Arjun K.', avatar: 'A', skill: 'react', type: 'question', title: '❓ Why does useEffect run twice in React 18?', content: 'I noticed useEffect is running twice in development mode in React 18. Is this a bug or intentional behavior? My API calls are being made twice!', likes: 28, replies: [{ author: 'Dev V.', content: 'This is React 18 Strict Mode intentionally unmounting/remounting to detect side effects. It only happens in development, not production!' }], created_at: new Date(Date.now() - 7200000).toISOString() },
+            { id: 'p3', author: 'Sneha P.', avatar: 'S', skill: 'design', type: 'share', title: '💡 7 UI Design Principles Every Developer Should Know', content: '1. Visual hierarchy guides attention. 2. Contrast creates focus. 3. Whitespace is your friend. 4. Consistency builds trust. 5. Feedback confirms actions. 6. Simplicity wins. 7. Accessibility is not optional.', likes: 87, replies: [], created_at: new Date(Date.now() - 86400000).toISOString() },
+            { id: 'p4', author: 'Vikram R.', avatar: 'V', skill: 'machine_learning', type: 'resource', title: '🔗 Free ML Datasets for Practice Projects', content: 'Great free datasets: 1. Kaggle.com - thousands of datasets 2. UCI ML Repository - classic datasets 3. Google Dataset Search - find any dataset 4. data.gov - government data 5. Hugging Face Datasets - NLP focused', likes: 63, replies: [], created_at: new Date(Date.now() - 172800000).toISOString() },
+        ];
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            user = Auth.getCurrentUser();
+            if (user) {
+                userProfile = Profile.getLocal(user.uid);
+                const name = userProfile?.name || user.name || 'U';
+                document.getElementById('composeAvatar').textContent = name.charAt(0).toUpperCase();
+            }
+            await loadPosts();
+        });
+
+        async function loadPosts() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/skill-share`);
+                const data = await res.json();
+                allPosts = data.length > 0 ? data : DEMO_POSTS;
+            } catch { allPosts = DEMO_POSTS; }
+            renderPosts();
+        }
+
+        function renderPosts() {
+            const filter = document.getElementById('searchInput').value.toLowerCase();
+            let posts = allPosts.filter(p => {
+                if (activeFilter !== 'all' && p.type !== activeFilter) return false;
+                if (filter && !p.title.toLowerCase().includes(filter) && !p.content.toLowerCase().includes(filter)) return false;
+                return true;
+            });
+            if (posts.length === 0) {
+                document.getElementById('postsContainer').innerHTML = '<div class="txt-center" style="padding:3rem;color:var(--text-muted);">No posts found. Be the first to post!</div>';
+                return;
+            }
+            document.getElementById('postsContainer').innerHTML = posts.map(p => renderPost(p)).join('');
+        }
+
+        function renderPost(p) {
+            const timeAgo = getTimeAgo(p.created_at);
+            const typeIcons = { share: '💡', question: '❓', resource: '🔗' };
+            const repliesHtml = (p.replies || []).map(r =>
+                `<div class="reply-item"><div class="avatar" style="width:28px;height:28px;font-size:0.7rem;">${r.author.charAt(0)}</div><div class="reply-content"><strong>${r.author}:</strong> ${r.content}</div></div>`
+            ).join('');
+            return `
+    <div class="post-card" id="post_${p.id}">
+      <div class="post-header">
+        <div class="avatar">${p.avatar || p.author.charAt(0)}</div>
+        <div class="post-meta">
+          <div class="post-author">${p.author} ${p.skill ? `<span class="badge badge-violet" style="margin-left:0.3rem;font-size:0.68rem;">${p.skill.replace('_', ' ')}</span>` : ''}</div>
+          <div class="post-time">${timeAgo} · ${typeIcons[p.type] || '💬'} ${p.type}</div>
+        </div>
+      </div>
+      <div class="post-title">${p.title}</div>
+      <div class="post-content">${p.content}</div>
+      <div class="post-footer">
+        <button class="post-action" onclick="likePost('${p.id}')">❤️ ${p.likes}</button>
+        <button class="post-action" onclick="toggleReplies('${p.id}')">💬 ${p.replies?.length || 0} Replies</button>
+      </div>
+      <div class="reply-section hidden" id="replies_${p.id}">
+        ${repliesHtml}
+        <div class="reply-input-row">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.7rem;">${user ? (userProfile?.name || 'U').charAt(0) : 'U'}</div>
+          <input class="reply-input" id="replyInput_${p.id}" placeholder="Write a reply..." />
+          <button class="btn btn-primary btn-sm" onclick="submitReply('${p.id}')">Reply</button>
+        </div>
+      </div>
+    </div>`;
+        }
+
+        function toggleReplies(id) {
+            document.getElementById('replies_' + id).classList.toggle('hidden');
+        }
+
+        function likePost(id) {
+            const post = allPosts.find(p => p.id === id);
+            if (post) { post.likes++; renderPosts(); }
+        }
+
+        async function createPost() {
+            if (!user) { Toast.error('Please login to post.'); window.location.href = 'auth.html'; return; }
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            if (!title || !content) { Toast.error('Please add a title and content.'); return; }
+            const post = {
+                id: 'p_' + Date.now(), author: userProfile?.name || user.email?.split('@')[0] || 'You',
+                avatar: (userProfile?.name || 'U').charAt(0).toUpperCase(),
+                skill: document.getElementById('postSkill').value,
+                type: document.getElementById('postType').value,
+                title, content, likes: 0, replies: [],
+                created_at: new Date().toISOString()
+            };
+            try {
+                await fetch(`${BACKEND_URL}/skill-share`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...post, uid: user.uid }) });
+            } catch { }
+            allPosts.unshift(post);
+            renderPosts();
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            Toast.success('Post shared with the community!');
+        }
+
+        async function submitReply(postId) {
+            if (!user) { Toast.error('Please login to reply.'); return; }
+            const input = document.getElementById('replyInput_' + postId);
+            if (!input.value.trim()) return;
+            const reply = { author: userProfile?.name || 'You', content: input.value.trim() };
+            const post = allPosts.find(p => p.id === postId);
+            if (post) { post.replies.push(reply); renderPosts(); document.getElementById('replies_' + postId).classList.remove('hidden'); }
+            try { await fetch(`${BACKEND_URL}/skill-share/${postId}/reply`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...reply, uid: user.uid }) }); } catch { }
+        }
+
+        function setFilter(f, btn) {
+            activeFilter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderPosts();
+        }
+
+        function filterPosts() { renderPosts(); }
+        function searchByTopic(topic) { document.getElementById('searchInput').value = topic; filterPosts(); }
+
+        function getTimeAgo(iso) {
+            const diff = Date.now() - new Date(iso).getTime();
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+            return `${Math.floor(diff / 86400000)}d ago`;
+        }
+    </script>
+</body>
+
+</html>

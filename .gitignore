@@ -1,0 +1,20 @@
+# ⚠️ NEVER commit your Firebase secret key!
+serviceAccountKey.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Data files (demo local storage)
+backend/data/
+
+# OS
+.DS_Store
+Thumbs.db

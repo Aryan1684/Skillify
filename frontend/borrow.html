@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skillify – Borrow a Skill</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        .page-content {
+            padding-top: calc(var(--nav-h) + 2rem);
+            padding-bottom: 4rem;
+        }
+
+        .borrow-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .borrow-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            border-color: var(--border-active);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .project-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-meta span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .project-footer {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        /* Post project form */
+        .post-project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-project-card h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Bids modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: scaleIn 0.3s ease;
+        }
+
+        .modal h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-close {
+            float: right;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-card h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">✦ Skillify</a>
+        <div class="nav-links">
+            <a href="skill-share.html">Community</a>
+            <a href="borrow.html" class="active">Borrow</a>
+            <a href="learn.html">Learn</a>
+            <a href="test.html">🏅 Quiz</a>
+            <a href="dashboard.html" class="btn btn-glass btn-sm">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <h1 style="font-size:1.6rem;">💼 Borrow a Skill <span class="badge badge-paid"
+                            style="vertical-align:middle;">PAID</span></h1>
+                    <p class="txt-muted txt-sm">Post a project and get bids from verified skill holders.</p>
+                </div>
+            </div>
+
+            <div class="borrow-layout">
+                <div>
+                    <!-- Post Project Form -->
+                    <div class="post-project-card">
+                        <h3>➕ Post a New Project</h3>
+                        <div style="display:flex;flex-direction:column;gap:0.9rem;">
+                            <div class="form-group"><label class="form-label">Project Title *</label><input
+                                    class="form-input" id="projTitle"
+                                    placeholder="e.g. Build a React E-commerce website" /></div>
+                            <div class="form-group"><label class="form-label">Description *</label><textarea
+                                    class="form-textarea form-input" id="projDesc"
+                                    placeholder="Describe exactly what you need..." style="min-height:80px"></textarea>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;">
+                                <div class="form-group">
+                                    <label class="form-label">Skill Needed</label>
+                                    <select class="form-input form-select" id="projSkill">
+                                        <option value="python">Python</option>
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="react">React</option>
+                                        <option value="design">UI/UX Design</option>
+                                        <option value="machine_learning">ML/AI</option>
+                                        <option value="java">Java</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="web_development">Web Dev</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label class="form-label">Budget (₹)</label><input
+                                        class="form-input" id="projBudget" placeholder="e.g. 5000–10000" /></div>
+                                <div class="form-group"><label class="form-label">Duration</label><input
+                                        class="form-input" id="projDuration" placeholder="e.g. 1 week" /></div>
+                            </div>
+                            <button class="btn btn-primary" onclick="postProject()" style="align-self:flex-start;">Post
+                                Project</button>
+                        </div>
+                    </div>
+
+                    <!-- Filter -->
+                    <div class="filter-bar" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+                        <button class="filter-btn active" onclick="filterBy('all',this)">All Projects</button>
+                        <button class="filter-btn" onclick="filterBy('python',this)">🐍 Python</button>
+                        <button class="filter-btn" onclick="filterBy('react',this)">⚛️ React</button>
+                        <button class="filter-btn" onclick="filterBy('design',this)">🎨 Design</button>
+                        <button class="filter-btn" onclick="filterBy('machine_learning',this)">🤖 ML/AI</button>
+                    </div>
+
+                    <div id="projectsContainer"></div>
+                </div>
+
+                <!-- Sidebar -->
+                <div>
+                    <div class="sidebar-card"
+                        style="background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.3);">
+                        <h4>💳 Payment Protected</h4>
+                        <p style="font-size:0.82rem;color:var(--text-secondary);">All payments are held in secure escrow
+                            and released only after project completion.</p>
+                        <div class="mt-2" style="font-size:0.78rem;color:var(--text-muted);">⚡ Powered by Razorpay
+                            (Coming Soon)</div>
+                    </div>
+                    <div class="sidebar-card">
+                        <h4>📌 Tips for Clients</h4>
+                        <ul
+                            style="font-size:0.82rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.5rem;">
+                            <li>📝 Write detailed project descriptions</li>
+                            <li>💰 Set a realistic budget</li>
+                            <li>🏅 Prefer verified badge holders</li>
+                            <li>⭐ Review previous work samples</li>
+                            <li>💬 Communicate clearly upfront</li>
+                        </ul>
+                    </div>
+                    <div class="sidebar-card">
+                        <h4>💡 Are You a Skill Holder?</h4>
+                        <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.75rem;">Get verified and
+                            browse open projects to place bids!</p>
+                        <a href="test.html" class="btn btn-primary w-full" style="font-size:0.82rem;">Get Verified →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bid Modal -->
+    <div class="modal-overlay hidden" id="bidModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeBidModal()">✕</button>
+            <h3 id="bidModalTitle">Place a Bid</h3>
+            <p class="txt-sm txt-muted mb-2" id="bidModalProject"></p>
+            <div style="display:flex;flex-direction:column;gap:0.9rem;">
+                <div class="form-group"><label class="form-label">Your Bid Amount (₹)</label><input class="form-input"
+                        id="bidAmount" placeholder="e.g. 8000" /></div>
+                <div class="form-group"><label class="form-label">Cover Letter / Message *</label><textarea
+                        class="form-textarea form-input" id="bidMsg"
+                        placeholder="Explain why you're the right person, your experience, timeline..."
+                        style="min-height:100px"></textarea></div>
+                <div
+                    style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-md);padding:0.75rem;font-size:0.82rem;color:#fbbf24;">
+                    ⚠️ Demo Mode: In production, payment would be processed via Razorpay escrow.
+                </div>
+                <button class="btn btn-primary" onclick="submitBid()">Submit Bid</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let user, userProfile, allProjects = [], activeBidProjectId = null, activeFilter = 'all';
+
+        const DEMO_PROJECTS = [
+            { id: 'pr1', client: 'Rohan M.', skill_needed: 'react', title: 'React Dashboard for Analytics Platform', description: 'Need a clean, responsive admin dashboard built with React + Chart.js. Should include user management, analytics charts, and dark mode support.', budget: '₹8,000–15,000', duration: '2 weeks', status: 'open', bids: [{ bidder: 'Priya S.', amount: '₹10,000', message: 'I have built 10+ dashboards with React. Available immediately.' }], created_at: new Date(Date.now() - 3600000).toISOString() },
+            { id: 'pr2', client: 'Ananya K.', skill_needed: 'python', title: 'Python Web Scraper for E-commerce Data', description: 'Need a Python scraper to collect product data (name, price, images) from 3 specific websites daily and store in CSV/database.', budget: '₹3,000–6,000', duration: '3 days', status: 'open', bids: [], created_at: new Date(Date.now() - 86400000).toISOString() },
+            { id: 'pr3', client: 'Deepak R.', skill_needed: 'design', title: 'Mobile App UI/UX Design (Figma)', description: 'Looking for a UI/UX designer to create screens for a fitness tracking app. Need complete design system, 15 screens, prototype.', budget: '₹12,000–20,000', duration: '1 week', status: 'open', bids: [{ bidder: 'Kritika J.', amount: '₹15,000', message: 'UI/UX specialist with 4 years in mobile apps. Portfolio ready.' }], created_at: new Date(Date.now() - 172800000).toISOString() },
+            { id: 'pr4', client: 'Rahul V.', skill_needed: 'machine_learning', title: 'Sentiment Analysis Model for Customer Reviews', description: 'Need a trained NLP model to classify customer reviews as positive/negative/neutral. Should achieve 85%+ accuracy. Provide model + API.', budget: '₹10,000–18,000', duration: '1 week', status: 'open', bids: [], created_at: new Date(Date.now() - 259200000).toISOString() },
+        ];
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            user = Auth.getCurrentUser();
+            if (user) userProfile = Profile.getLocal(user.uid);
+            await loadProjects();
+        });
+
+        async function loadProjects() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/borrow`);
+                const data = await res.json();
+                allProjects = data.length > 0 ? [...data, ...DEMO_PROJECTS] : DEMO_PROJECTS;
+            } catch { allProjects = DEMO_PROJECTS; }
+            renderProjects();
+        }
+
+        function renderProjects() {
+            let projects = allProjects.filter(p => activeFilter === 'all' || p.skill_needed === activeFilter);
+            if (projects.length === 0) {
+                document.getElementById('projectsContainer').innerHTML = '<div class="txt-center" style="padding:3rem;color:var(--text-muted);">No projects found.</div>';
+                return;
+            }
+            document.getElementById('projectsContainer').innerHTML = projects.map(p => `
+      <div class="project-card">
+        <div class="project-header">
+          <div>
+            <div class="project-title">${p.title}</div>
+            <div class="project-meta">
+              <span>👤 ${p.client}</span>
+              <span>🛠️ ${(p.skill_needed || '').replace('_', ' ')}</span>
+              <span>💰 ${p.budget}</span>
+              <span>⏱ ${p.duration}</span>
+              <span>📋 ${(p.bids || []).length} bids</span>
+            </div>
+          </div>
+          <span class="badge badge-green">Open</span>
+        </div>
+        <div class="project-desc">${p.description}</div>
+        <div class="project-footer">
+          <button class="btn btn-primary btn-sm" onclick="openBidModal('${p.id}','${p.title.replace(/'/g, '&apos;')}')">💼 Place Bid</button>
+          <button class="btn btn-glass btn-sm" onclick="viewBids(this,'${p.id}')">View ${(p.bids || []).length} Bids</button>
+        </div>
+        <div class="reply-section hidden" id="bids_${p.id}">
+          ${(p.bids || []).map(b => `<div class="reply-item"><div class="avatar" style="width:30px;height:30px;font-size:0.7rem;">${b.bidder.charAt(0)}</div><div class="reply-content"><strong>${b.bidder}</strong> – ${b.amount}<br/>${b.message}</div></div>`).join('')}
+          ${(p.bids || []).length === 0 ? '<p style="color:var(--text-muted);font-size:0.85rem;">No bids yet. Be the first!</p>' : ''}
+        </div>
+      </div>`).join('');
+        }
+
+        function viewBids(btn, id) { document.getElementById('bids_' + id).classList.toggle('hidden'); }
+
+        function openBidModal(projectId, title) {
+            if (!user) { Toast.error('Please login to place a bid.'); window.location.href = 'auth.html'; return; }
+            activeBidProjectId = projectId;
+            document.getElementById('bidModalTitle').textContent = 'Place a Bid';
+            document.getElementById('bidModalProject').textContent = '📁 ' + title;
+            document.getElementById('bidModal').classList.remove('hidden');
+        }
+        function closeBidModal() { document.getElementById('bidModal').classList.add('hidden'); }
+
+        async function submitBid() {
+            const amount = document.getElementById('bidAmount').value.trim();
+            const msg = document.getElementById('bidMsg').value.trim();
+            if (!msg) { Toast.error('Please write a cover letter.'); return; }
+            const bid = { bidder: userProfile?.name || user.email?.split('@')[0] || 'You', amount: amount ? '₹' + amount : 'Negotiable', message: msg };
+            const project = allProjects.find(p => p.id === activeBidProjectId);
+            if (project) { project.bids.push(bid); renderProjects(); }
+            try { await fetch(`${BACKEND_URL}/borrow/${activeBidProjectId}/bid`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...bid, uid: user.uid }) }); } catch { }
+            closeBidModal();
+            Toast.success('Bid submitted! The client will be notified.');
+        }
+
+        async function postProject() {
+            if (!user) { Toast.error('Please login to post a project.'); window.location.href = 'auth.html'; return; }
+            const title = document.getElementById('projTitle').value.trim();
+            const desc = document.getElementById('projDesc').value.trim();
+            if (!title || !desc) { Toast.error('Please fill in title and description.'); return; }
+            const project = {
+                id: 'pr_' + Date.now(), client: userProfile?.name || 'You', client_uid: user.uid,
+                title, description: desc, skill_needed: document.getElementById('projSkill').value,
+                budget: '₹' + document.getElementById('projBudget').value, duration: document.getElementById('projDuration').value,
+                status: 'open', bids: [], created_at: new Date().toISOString()
+            };
+            try { await fetch(`${BACKEND_URL}/borrow`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...project, uid: user.uid }) }); } catch { }
+            allProjects.unshift(project);
+            renderProjects();
+            document.getElementById('projTitle').value = ''; document.getElementById('projDesc').value = '';
+            Toast.success('Project posted! Bids will start coming in soon.');
+        }
+
+        function filterBy(f, btn) {
+            activeFilter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProjects();
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `.filter-btn { padding: 0.4rem 1rem; border-radius: var(--radius-full); border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); font-size: 0.82rem; cursor: pointer; transition: var(--transition); } .filter-btn:hover, .filter-btn.active { background: rgba(124,58,237,0.15); border-color: var(--violet); color: #a78bfa; }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skillify – My Profile</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        .page-content {
+            padding-top: calc(var(--nav-h) + 2rem);
+            padding-bottom: 4rem;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Profile sidebar */
+        .profile-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .profile-avatar-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .profile-edit-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--violet);
+            border: 2px solid var(--bg-primary);
+            color: #fff;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-email {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .profile-goal-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: var(--radius-full);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.78rem;
+            color: #a78bfa;
+            margin-bottom: 1rem;
+        }
+
+        .profile-bio {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .profile-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .profile-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--violet-light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-card);
+        }
+
+        .profile-link:hover {
+            border-color: var(--violet);
+        }
+
+        /* Main area */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .verified-badge-big {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(124, 58, 237, 0.08);
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .vb-icon {
+            font-size: 2rem;
+        }
+
+        .vb-skill {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .vb-level {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Edit form */
+        .edit-form {
+            display: none;
+        }
+
+        .edit-form.visible {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">✦ Skillify</a>
+        <div class="nav-links">
+            <a href="skill-share.html">Community</a>
+            <a href="borrow.html">Borrow</a>
+            <a href="learn.html">Learn</a>
+            <a href="test.html">🏅 Quiz</a>
+            <a href="dashboard.html" class="btn btn-glass btn-sm">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+            <div class="flex justify-between items-center mb-3">
+                <h1 style="font-size:1.4rem;">My Profile</h1>
+                <div class="flex gap-1">
+                    <button class="btn btn-outline btn-sm" onclick="toggleEdit()">✏️ Edit Profile</button>
+                    <button class="btn btn-glass btn-sm" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="profile-layout">
+                <!-- Left: Profile Card -->
+                <div>
+                    <div class="profile-card">
+                        <div class="profile-avatar-wrap">
+                            <div class="avatar avatar-xl" id="profileAvatar">U</div>
+                            <div class="profile-edit-btn" onclick="toggleEdit()">✏️</div>
+                        </div>
+                        <div class="profile-name" id="profileName">Loading...</div>
+                        <div class="profile-email" id="profileEmail"></div>
+                        <div class="profile-goal-tag" id="profileGoalTag">📚 Learner</div>
+                        <div class="profile-bio" id="profileBio">No bio yet.</div>
+                        <div class="profile-links" id="profileLinks"></div>
+                        <div class="flex gap-1 justify-center">
+                            <div class="stat-card" style="flex:1;">
+                                <div class="stat-number" id="profileSkillCount">0</div>
+                                <div class="stat-label">Skills</div>
+                            </div>
+                            <div class="stat-card" style="flex:1;">
+                                <div class="stat-number" id="profileBadgeCount">0</div>
+                                <div class="stat-label">Badges</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="test.html" class="btn btn-primary w-full btn-sm">🏅 Take Skill Quiz</a>
+                        </div>
+                    </div>
+
+                    <!-- Achievements -->
+                    <div class="section-card mt-3">
+                        <h3>🏆 Achievements</h3>
+                        <p class="txt-sm txt-muted" id="profileAchievements">No achievements listed yet.</p>
+                    </div>
+                </div>
+
+                <!-- Right: Main Content -->
+                <div>
+                    <!-- Verified Badges -->
+                    <div class="section-card">
+                        <div class="flex justify-between items-center mb-2" style="margin-bottom:0.75rem;">
+                            <h3 style="margin-bottom:0;">🏅 Verified Skill Badges</h3>
+                            <a href="test.html" class="btn btn-primary btn-sm">Earn More →</a>
+                        </div>
+                        <div id="verifiedBadgesContainer">
+                            <p class="txt-sm txt-muted">No verified badges yet. Take a skill quiz to earn your first
+                                badge!</p>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="section-card">
+                        <h3>🛠️ Skills</h3>
+                        <div id="profileSkillsChips" style="display:flex;flex-wrap:wrap;gap:0.6rem;"></div>
+                    </div>
+
+                    <!-- Edit Form -->
+                    <div class="section-card edit-form" id="editForm">
+                        <h3>✏️ Edit Profile</h3>
+                        <div style="display:flex;flex-direction:column;gap:0.9rem;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                                <div class="form-group"><label class="form-label">Full Name</label><input
+                                        class="form-input" id="editName" /></div>
+                                <div class="form-group"><label class="form-label">Age</label><input type="number"
+                                        class="form-input" id="editAge" /></div>
+                            </div>
+                            <div class="form-group"><label class="form-label">LinkedIn URL</label><input
+                                    class="form-input" id="editLinkedin" /></div>
+                            <div class="form-group"><label class="form-label">GitHub URL</label><input
+                                    class="form-input" id="editGithub" /></div>
+                            <div class="form-group"><label class="form-label">Bio</label><textarea
+                                    class="form-input form-textarea" id="editBio" style="min-height:80px"></textarea>
+                            </div>
+                            <div class="form-group"><label class="form-label">Achievements</label><textarea
+                                    class="form-input form-textarea" id="editAchievements"
+                                    style="min-height:70px"></textarea></div>
+                            <div class="form-group">
+                                <label class="form-label">Goal</label>
+                                <select class="form-input form-select" id="editGoal">
+                                    <option value="learn">📚 I want to Learn</option>
+                                    <option value="share">🧠 I want to Share / Teach</option>
+                                </select>
+                            </div>
+                            <div style="display:flex;gap:0.75rem;">
+                                <button class="btn btn-primary" onclick="saveProfile()" style="flex:1;">Save
+                                    Changes</button>
+                                <button class="btn btn-glass" onclick="toggleEdit()" style="flex:1;">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let user, profile;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            user = Auth.requireAuth();
+            if (!user) return;
+            profile = await Profile.get(user.uid) || Profile.getLocal(user.uid);
+            if (!profile) { window.location.href = 'onboarding.html'; return; }
+            renderProfile(profile, user);
+        });
+
+        function renderProfile(p, u) {
+            const name = p.name || u.email?.split('@')[0] || 'Skillifier';
+            document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileEmail').textContent = p.email || u.email || '';
+            document.getElementById('profileBio').textContent = p.bio || 'No bio yet.';
+            document.getElementById('profileAchievements').textContent = p.achievements || 'No achievements listed yet.';
+            document.getElementById('profileGoalTag').textContent = p.goal === 'share' ? '🧠 Skill Sharer' : '📚 Learner';
+            document.getElementById('profileSkillCount').textContent = (p.skills || []).length;
+            document.getElementById('profileBadgeCount').textContent = (p.verified_skills || []).length;
+
+            // Social links
+            const links = [];
+            if (p.linkedin) links.push(`<a href="${p.linkedin}" target="_blank" class="profile-link">🔗 LinkedIn</a>`);
+            if (p.github) links.push(`<a href="${p.github}" target="_blank" class="profile-link">🐙 GitHub</a>`);
+            if (p.age) links.push(`<div class="profile-link">🎂 Age: ${p.age}</div>`);
+            document.getElementById('profileLinks').innerHTML = links.join('');
+
+            // Verified badges
+            const badges = p.badges || [];
+            if (badges.length > 0) {
+                document.getElementById('verifiedBadgesContainer').innerHTML = badges.map(b => `
+        <div class="verified-badge-big">
+          <span class="vb-icon">🥇</span>
+          <div>
+            <div class="vb-skill">${b.skill.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</div>
+            <div class="vb-level">${b.level} · ${b.score}% score</div>
+          </div>
+          <span class="badge badge-green" style="margin-left:auto;">Verified ✓</span>
+        </div>`).join('');
+            } else {
+                document.getElementById('verifiedBadgesContainer').innerHTML = '<p class="txt-sm txt-muted">No verified badges yet. <a href="test.html" style="color:var(--violet-light);">Take a quiz →</a></p>';
+            }
+
+            // Skills chips
+            const skills = p.skills || [];
+            document.getElementById('profileSkillsChips').innerHTML = skills.length > 0
+                ? skills.map(s => `<span class="chip selected">${s.replace('_', ' ')}</span>`).join('')
+                : '<p class="txt-sm txt-muted">No skills listed yet.</p>';
+
+            // Pre-fill edit form
+            document.getElementById('editName').value = p.name || '';
+            document.getElementById('editAge').value = p.age || '';
+            document.getElementById('editLinkedin').value = p.linkedin || '';
+            document.getElementById('editGithub').value = p.github || '';
+            document.getElementById('editBio').value = p.bio || '';
+            document.getElementById('editAchievements').value = p.achievements || '';
+            document.getElementById('editGoal').value = p.goal || 'learn';
+        }
+
+        function toggleEdit() {
+            document.getElementById('editForm').classList.toggle('visible');
+            window.scrollTo({ top: document.getElementById('editForm').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        async function saveProfile() {
+            const updated = {
+                ...profile,
+                name: document.getElementById('editName').value.trim(),
+                age: document.getElementById('editAge').value,
+                linkedin: document.getElementById('editLinkedin').value.trim(),
+                github: document.getElementById('editGithub').value.trim(),
+                bio: document.getElementById('editBio').value.trim(),
+                achievements: document.getElementById('editAchievements').value.trim(),
+                goal: document.getElementById('editGoal').value,
+            };
+            await Profile.save(updated);
+            profile = updated;
+            renderProfile(profile, user);
+            toggleEdit();
+            Toast.success('Profile updated successfully!');
+        }
+
+        async function handleLogout() {
+            await Auth.logout();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

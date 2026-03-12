@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skillify – Dashboard</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        .page-content {
+            padding-top: calc(var(--nav-h) + 2rem);
+            padding-bottom: 4rem;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(79, 70, 229, 0.15), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: var(--radius-xl);
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .welcome-text p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        /* Quick links */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .ql-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ql-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .ql-free::before {
+            background: var(--green);
+        }
+
+        .ql-borrow::before {
+            background: linear-gradient(90deg, var(--violet), var(--pink));
+        }
+
+        .ql-learn::before {
+            background: linear-gradient(90deg, var(--amber), var(--pink));
+        }
+
+        .ql-card:hover {
+            border-color: var(--border-active);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .ql-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .ql-card strong {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .ql-card span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Badges section */
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .skill-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            border-radius: var(--radius-full);
+            padding: 0.4rem 0.9rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .skill-badge .badge-check {
+            color: var(--green);
+        }
+
+        /* Recent activity */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+
+            .quick-links,
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .welcome-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">✦ Skillify</a>
+        <div class="nav-links">
+            <a href="skill-share.html">Community</a>
+            <a href="borrow.html">Borrow</a>
+            <a href="learn.html">Learn</a>
+            <a href="test.html">🏅 Take Quiz</a>
+            <a href="profile.html" id="navProfileBtn" class="btn btn-glass btn-sm">My Profile</a>
+            <button onclick="handleLogout()" class="btn btn-outline btn-sm">Logout</button>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="container">
+
+            <!-- Welcome Banner -->
+            <div class="welcome-card fade-in">
+                <div class="avatar avatar-xl" id="dashAvatar">U</div>
+                <div class="welcome-text">
+                    <h1>Welcome back, <span class="gradient-text" id="dashName">Skillifier</span>! 👋</h1>
+                    <p id="dashGoal">You're on track. Keep learning and sharing.</p>
+                    <div class="flex gap-1 mt-2" id="dashLinks"></div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row fade-in">
+                <div class="stat-card">
+                    <div class="stat-number" id="statSkills">0</div>
+                    <div class="stat-label">Skills Listed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statVerified">0</div>
+                    <div class="stat-label">Verified Badges</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statPosts">0</div>
+                    <div class="stat-label">Community Posts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statRep">0</div>
+                    <div class="stat-label">Reputation Pts</div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <h2 style="font-size:1.2rem;margin-bottom:1rem;">🚀 Quick Access</h2>
+            <div class="quick-links">
+                <a href="skill-share.html" class="ql-card ql-free">
+                    <span class="ql-icon">🤝</span>
+                    <strong>Skill Share</strong>
+                    <span>Free community · Ask, Share, Learn</span>
+                    <div class="mt-2"><span class="badge badge-free">FREE</span></div>
+                </a>
+                <a href="borrow.html" class="ql-card ql-borrow">
+                    <span class="ql-icon">💼</span>
+                    <strong>Borrow a Skill</strong>
+                    <span>Hire verified experts for your projects</span>
+                    <div class="mt-2"><span class="badge badge-paid">PAID</span></div>
+                </a>
+                <a href="learn.html" class="ql-card ql-learn">
+                    <span class="ql-icon">🎓</span>
+                    <strong>Learn from Experts</strong>
+                    <span>Structured courses from ₹999</span>
+                    <div class="mt-2"><span class="badge badge-paid">PAID</span></div>
+                </a>
+            </div>
+
+            <div class="grid-2">
+                <!-- Badge Tier -->
+                <div class="card" id="badgeTierCard">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 style="font-size:1.05rem;">🏆 My Badge Tier</h3>
+                        <a href="borrow.html" class="btn btn-primary btn-sm">Complete Tasks</a>
+                    </div>
+                    <div id="currentBadgeDisplay" style="margin-bottom:1rem;"></div>
+                    <div id="badgeProgressSection"></div>
+                </div>
+
+                <!-- Skill Approvals -->
+                <div class="card">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 style="font-size:1.05rem;">✅ Skill Approvals</h3>
+                        <a href="test.html" class="btn btn-primary btn-sm">Take Quiz</a>
+                    </div>
+                    <div class="badge-row" id="dashBadges">
+                        <span style="color:var(--text-muted);font-size:0.85rem;">No approved skills yet. Take a
+                            quiz!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Skills -->
+            <div class="card">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 style="font-size:1.05rem;">🛠️ My Skills</h3>
+                    <a href="profile.html" class="btn btn-glass btn-sm">Edit</a>
+                </div>
+                <div class="badge-row" id="dashSkills">
+                    <span style="color:var(--text-muted);font-size:0.85rem;">No skills added yet.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card mt-3">
+            <h3 style="font-size:1.05rem;margin-bottom:0.5rem;">📋 Recent Activity</h3>
+            <div id="activityFeed">
+                <div class="activity-item">
+                    <div class="activity-icon">✦</div>
+                    <div><strong>Welcome to Skillify!</strong><br /><span class="txt-sm txt-muted">Complete your
+                            profile to unlock all features.</span></div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🏅</div>
+                    <div><strong>Skill Verification Available</strong><br /><span class="txt-sm txt-muted">Take a
+                            quiz to earn your first verified badge.</span></div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🤝</div>
+                    <div><strong>Explore Skill Share Community</strong><br /><span class="txt-sm txt-muted">Free
+                            discussions and knowledge sharing.</span></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const BADGE_INFO = {
+            null: { icon: '—', label: 'No Badge', cls: '', nextAt: null, next: 'Bronze' },
+            Bronze: { icon: '🥉', label: 'Bronze', cls: 'bronze', nextAt: 5, next: 'Iron' },
+            Iron: { icon: '⚙️', label: 'Iron', cls: 'iron', nextAt: 15, next: 'Silver' },
+            Silver: { icon: '🥈', label: 'Silver', cls: 'silver', nextAt: 30, next: 'Gold' },
+            Gold: { icon: '🥇', label: 'Gold', cls: 'gold', nextAt: 45, next: 'Diamond' },
+            Diamond: { icon: '💎', label: 'Diamond', cls: 'diamond', nextAt: 55, next: 'Platinum' },
+            Platinum: { icon: '🏆', label: 'Platinum', cls: 'platinum', nextAt: null, next: null },
+        };
+
+        function computeBadge(taskCount, linkedin, github) {
+            if (taskCount >= 55) return 'Platinum';
+            if (taskCount >= 45) return 'Diamond';
+            if (taskCount >= 30) return 'Gold';
+            if (taskCount >= 15) return 'Silver';
+            if (taskCount >= 5) return 'Iron';
+            if (linkedin || github) return 'Bronze';
+            return null;
+        }
+
+        let user, profile;
+        window.addEventListener('DOMContentLoaded', async () => {
+            user = Auth.requireAuth();
+            if (!user) return;
+            profile = await Profile.get(user.uid) || Profile.getLocal(user.uid);
+            if (!profile) { window.location.href = 'onboarding.html'; return; }
+            renderDashboard(profile, user);
+        });
+
+        function renderDashboard(p, u) {
+            const name = p.name || u.name || u.email?.split('@')[0] || 'Skillifier';
+            document.getElementById('dashAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('dashName').textContent = name;
+            document.getElementById('dashGoal').textContent = p.goal === 'share'
+                ? '🧠 You\'re on a teaching journey. Share your expertise!'
+                : '📚 You\'re on a learning journey. Keep it up!';
+
+            // Social links
+            const links = [];
+            if (p.linkedin) links.push(`<a href="${p.linkedin}" target="_blank" class="btn btn-glass btn-sm">LinkedIn</a>`);
+            if (p.github) links.push(`<a href="${p.github}" target="_blank" class="btn btn-glass btn-sm">GitHub</a>`);
+            document.getElementById('dashLinks').innerHTML = links.join('');
+
+            // Compute current badge
+            const taskCount = p.task_count || 0;
+            const badgeKey = computeBadge(taskCount, p.linkedin, p.github) || 'null';
+            const info = BADGE_INFO[badgeKey] || BADGE_INFO['null'];
+
+            // Stats
+            document.getElementById('statSkills').textContent = (p.skills || []).length;
+            document.getElementById('statVerified').textContent = (p.approved_skills || p.verified_skills || []).length;
+            document.getElementById('statPosts').textContent = taskCount;
+            document.getElementById('statRep').textContent = (taskCount * 20) + ((p.skills || []).length * 10);
+
+            // Update stat labels
+            document.querySelectorAll('.stat-label')[1].textContent = 'Skill Approvals';
+            document.querySelectorAll('.stat-label')[2].textContent = 'Tasks Done';
+
+            // Badge display
+            const badgeHtml = badgeKey === 'null'
+                ? `<div style="text-align:center;padding:1rem;color:var(--text-muted);font-size:0.85rem;">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">🏅</div>
+                    Link your LinkedIn or GitHub to earn your Bronze badge!
+                   </div>`
+                : `<div class="badge-showcase-card ${info.cls}">
+                    <span class="b-icon">${info.icon}</span>
+                    <div>
+                      <div class="b-name" style="font-size:1.1rem;">${info.label} Badge</div>
+                      <div class="b-req">${taskCount} task${taskCount !== 1 ? 's' : ''} completed</div>
+                      <div class="b-earn">✓ ${badgeKey === 'Bronze' ? 'Profile linked' : `${taskCount} / ${BADGE_INFO[badgeKey]?.nextAt || 55} tasks`}</div>
+                    </div>
+                   </div>`;
+            document.getElementById('currentBadgeDisplay').innerHTML = badgeHtml;
+
+            // Progress to next badge
+            if (info.next && info.nextAt) {
+                const prev = { Bronze: 0, Iron: 1, Silver: 5, Gold: 15, Diamond: 30, Platinum: 45 }[badgeKey] ?? 0;
+                const prevAt = badgeKey === 'null' ? 0 : (badgeKey === 'Bronze' ? 0 : prev);
+                const pct = Math.min(100, Math.round(((taskCount - prevAt) / (info.nextAt - prevAt)) * 100));
+                document.getElementById('badgeProgressSection').innerHTML = `
+                    <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.4rem;">
+                      Progress to ${BADGE_INFO[info.next]?.icon} ${info.next} (${taskCount}/${info.nextAt} tasks)
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+                    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.4rem;">${info.nextAt - taskCount} more tasks to unlock ${info.next}</div>`;
+            } else if (!info.next) {
+                document.getElementById('badgeProgressSection').innerHTML =
+                    '<div style="color:#a78bfa;font-size:0.85rem;text-align:center;margin-top:0.5rem;">🏆 Maximum tier reached — Skillify Ambassador!</div>';
+            }
+
+            // Skill approvals (old profiles may have verified_skills)
+            const approvals = p.approved_skills || p.verified_skills || [];
+            if (approvals.length > 0) {
+                document.getElementById('dashBadges').innerHTML = approvals.map(s =>
+                    `<span class="skill-badge"><span class="badge-check">✅</span> ${s.replace('_', ' ')}</span>`
+                ).join('');
+            }
+
+            // Skills
+            const skills = p.skills || [];
+            if (skills.length > 0) {
+                document.getElementById('dashSkills').innerHTML = skills.map(s =>
+                    `<span class="badge badge-violet">${s.replace('_', ' ')}</span>`
+                ).join('');
+            }
+        }
+
+        async function handleLogout() {
+            await Auth.logout();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

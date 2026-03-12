@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skillify – Complete Your Profile</title>
+    <link rel="stylesheet" href="styles/main.css" />
+    <style>
+        body {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 3rem 1.5rem;
+        }
+
+        .onboard-wrapper {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo-bar {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-bar a {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--grad-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Progress steps */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 2.5rem;
+        }
+
+        .sp-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            color: var(--text-muted);
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .sp-dot.active {
+            background: var(--violet);
+            border-color: var(--violet);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+        }
+
+        .sp-dot.done {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+        }
+
+        .sp-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            max-width: 80px;
+            transition: var(--transition);
+        }
+
+        .sp-line.done {
+            background: var(--green);
+        }
+
+        .onboard-card {
+            background: rgba(13, 13, 26, 0.9);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            backdrop-filter: blur(30px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .step-header {
+            margin-bottom: 1.75rem;
+        }
+
+        .step-header h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .step-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Goal selection */
+        .goal-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .goal-card {
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .goal-card:hover {
+            border-color: var(--violet);
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        .goal-card.selected {
+            border-color: var(--violet);
+            background: rgba(124, 58, 237, 0.15);
+        }
+
+        .goal-card .goal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .goal-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .goal-card p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Skill chips */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.75rem;
+        }
+
+        .step-actions .btn {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 480px) {
+
+            .form-grid,
+            .goal-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="onboard-wrapper">
+        <div class="logo-bar"><a href="index.html">✦ Skillify</a></div>
+
+        <!-- Progress bar -->
+        <div class="step-progress">
+            <div class="sp-dot active" id="dot1">1</div>
+            <div class="sp-line" id="line1"></div>
+            <div class="sp-dot" id="dot2">2</div>
+            <div class="sp-line" id="line2"></div>
+            <div class="sp-dot" id="dot3">3</div>
+            <div class="sp-line" id="line3"></div>
+            <div class="sp-dot" id="dot4">4</div>
+        </div>
+
+        <div class="onboard-card">
+
+            <!-- STEP 1: Personal Info -->
+            <div id="step1">
+                <div class="step-header">
+                    <h2>👋 Tell Us About You</h2>
+                    <p>Fill in your details to build your Skillify profile.</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div class="form-grid">
+                        <div class="form-group"><label class="form-label">First Name *</label><input class="form-input"
+                                id="s1_firstName" placeholder="Arjun" /></div>
+                        <div class="form-group"><label class="form-label">Last Name *</label><input class="form-input"
+                                id="s1_lastName" placeholder="Sharma" /></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group"><label class="form-label">Age *</label><input type="number"
+                                class="form-input" id="s1_age" placeholder="22" min="13" max="99" /></div>
+                        <div class="form-group"><label class="form-label">Country</label><input class="form-input"
+                                id="s1_country" placeholder="India" /></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">LinkedIn URL</label><input class="form-input"
+                            id="s1_linkedin" placeholder="https://linkedin.com/in/yourname" /></div>
+                    <div class="form-group"><label class="form-label">GitHub URL</label><input class="form-input"
+                            id="s1_github" placeholder="https://github.com/yourname" /></div>
+                    <div class="form-group"><label class="form-label">Bio / Short Intro</label><textarea
+                            class="form-input form-textarea" id="s1_bio"
+                            placeholder="Tell the community a bit about yourself..." style="min-height:80px"></textarea>
+                    </div>
+                    <div class="form-group"><label class="form-label">Achievements & Certifications</label><textarea
+                            class="form-input form-textarea" id="s1_achievements"
+                            placeholder="e.g. AWS Certified, won XYZ hackathon, built ABC project..."
+                            style="min-height:80px"></textarea></div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-primary" onclick="nextStep(1)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Goal + Badge System -->
+            <div id="step2" class="hidden">
+                <div class="step-header">
+                    <h2>🎯 What's Your Goal?</h2>
+                    <p>You can always change this later from your profile.</p>
+                </div>
+                <div class="goal-cards">
+                    <div class="goal-card" id="goalLearn" onclick="selectGoal('learn')">
+                        <div class="goal-icon">📚</div>
+                        <h4>I Want to Learn</h4>
+                        <p>Join the community, take courses, hire experts for my projects</p>
+                    </div>
+                    <div class="goal-card" id="goalShare" onclick="selectGoal('share')">
+                        <div class="goal-icon">🧠</div>
+                        <h4>I Want to Share / Teach</h4>
+                        <p>Share my knowledge, create courses, take on freelance project work</p>
+                    </div>
+                </div>
+
+                <!-- Badge System Showcase -->
+                <div
+                    style="margin-top:1.75rem;padding:1.25rem;background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-lg);">
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                        <span style="font-size:1.5rem;">🏆</span>
+                        <div>
+                            <h4 style="font-size:0.95rem;margin-bottom:0.1rem;">Your Badge = Your Earning Power</h4>
+                            <p style="font-size:0.78rem;color:var(--text-secondary);">Higher badge → more project
+                                opportunities → more income. Badges are earned through completed tasks.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:0.55rem;">
+                        <div class="badge-showcase-card bronze">
+                            <span class="b-icon">🥉</span>
+                            <div>
+                                <div class="b-name" style="color:#cd7f32;">Bronze</div>
+                                <div class="b-req">Requirement: Link your LinkedIn or GitHub</div>
+                                <div class="b-earn">✓ Unlocks profile visibility & basic bids</div>
+                            </div>
+                        </div>
+                        <div class="badge-showcase-card iron">
+                            <span class="b-icon">⚙️</span>
+                            <div>
+                                <div class="b-name" style="color:#9ca3af;">Iron</div>
+                                <div class="b-req">Requirement: Complete 5 tasks</div>
+                                <div class="b-earn">✓ Priority listing in search results</div>
+                            </div>
+                        </div>
+                        <div class="badge-showcase-card silver">
+                            <span class="b-icon">🥈</span>
+                            <div>
+                                <div class="b-name" style="color:#cbd5e1;">Silver</div>
+                                <div class="b-req">Requirement: Complete 15 tasks</div>
+                                <div class="b-earn">✓ Featured on course & borrow listings</div>
+                            </div>
+                        </div>
+                        <div class="badge-showcase-card gold">
+                            <span class="b-icon">🥇</span>
+                            <div>
+                                <div class="b-name" style="color:#fbbf24;">Gold</div>
+                                <div class="b-req">Requirement: Complete 30 tasks</div>
+                                <div class="b-earn">✓ Sponsored project invitations + higher pay</div>
+                            </div>
+                        </div>
+                        <div class="badge-showcase-card diamond">
+                            <span class="b-icon">💎</span>
+                            <div>
+                                <div class="b-name" style="color:#67e8f9;">Diamond</div>
+                                <div class="b-req">Requirement: Complete 45 tasks</div>
+                                <div class="b-earn">✓ Exclusive enterprise clients + top earner tag</div>
+                            </div>
+                        </div>
+                        <div class="badge-showcase-card platinum">
+                            <span class="b-icon">🏆</span>
+                            <div>
+                                <div class="b-name" style="color:#a78bfa;">Platinum</div>
+                                <div class="b-req">Requirement: Complete 55+ tasks</div>
+                                <div class="b-earn">✓ Verified Expert status + Skillify Ambassador</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.75rem;text-align:center;">💡 Skill
+                        quizzes give <strong>skill approval</strong> (verified knowledge). Badges are earned through
+                        task completion.</p>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn btn-glass" onclick="prevStep(2)">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(2)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Skills -->
+            <div id="step3" class="hidden">
+                <div class="step-header">
+                    <h2 id="step3Title">🛠️ Select Your Skills</h2>
+                    <p id="step3Sub">Pick the skills you have (or want to learn). You can add more later.</p>
+                </div>
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="form-group mt-3">
+                    <label class="form-label">Other Skills (comma separated)</label>
+                    <input class="form-input" id="otherSkills" placeholder="e.g. Photography, Video Editing, Kotlin" />
+                </div>
+                <div class="step-actions">
+                    <button class="btn btn-glass" onclick="prevStep(3)">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(3)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Skill Approval -->
+            <div id="step4" class="hidden">
+                <div class="step-header">
+                    <h2>✅ Skill Approval Quiz</h2>
+                    <p>Take a short quiz for each skill to get <strong style="color:#a78bfa">officially
+                            approved</strong> on Skillify. This proves you know the skill — your <strong>badge
+                            level</strong> is earned separately through completing tasks.</p>
+                </div>
+                <div
+                    style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius-md);padding:0.9rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#fbbf24;">
+                    📝 Quiz = Skill Approval only. Your badge (Bronze → Platinum) is earned by completing tasks on the
+                    platform.
+                </div>
+                <div id="selectedSkillsVerify" style="display:flex;flex-direction:column;gap:0.75rem;"></div>
+                <div class="step-actions mt-3">
+                    <button class="btn btn-glass" onclick="prevStep(4)">← Back</button>
+                    <button class="btn btn-outline" onclick="skipToProfile()">Skip for Now</button>
+                    <button class="btn btn-primary" onclick="startVerification()">Start Skill Quiz →</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const ALL_SKILLS = [
+            { id: 'python', label: '🐍 Python' },
+            { id: 'javascript', label: '⚡ JavaScript' },
+            { id: 'react', label: '⚛️ React' },
+            { id: 'web_development', label: '🌐 Web Development' },
+            { id: 'java', label: '☕ Java' },
+            { id: 'data_science', label: '📊 Data Science' },
+            { id: 'machine_learning', label: '🤖 Machine Learning' },
+            { id: 'design', label: '🎨 UI/UX Design' },
+            { id: 'marketing', label: '📈 Marketing' },
+            { id: 'css', label: '🎀 CSS/SCSS' },
+            { id: 'nodejs', label: '🟢 Node.js' },
+            { id: 'sql', label: '🗄️ SQL' },
+            { id: 'devops', label: '⚙️ DevOps' },
+            { id: 'flutter', label: '📱 Flutter' },
+            { id: 'kotlin', label: '🤖 Kotlin' },
+            { id: 'c_cpp', label: '⚙️ C/C++' },
+            { id: 'photography', label: '📸 Photography' },
+            { id: 'content_writing', label: '✍️ Content Writing' },
+            { id: 'video_editing', label: '🎬 Video Editing' },
+            { id: 'music', label: '🎵 Music' },
+        ];
+
+        let selectedSkills = new Set();
+        let selectedGoal = '';
+        let currentStep = 1;
+        let user = null;
+
+        // Auth guard
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof Auth !== 'undefined' && typeof Auth.onAuthStateChanged === 'function') {
+                Auth.onAuthStateChanged(firebaseUser => {
+                    if (firebaseUser) {
+                        user = firebaseUser;
+                        renderSkillChips();
+                    } else {
+                        window.location.href = 'auth.html';
+                    }
+                });
+            } else {
+                // Fallback for demo mode
+                user = Auth.getCurrentUser();
+                if (!user) { window.location.href = 'auth.html'; return; }
+                renderSkillChips();
+            }
+        });
+
+        function renderSkillChips() {
+            const grid = document.getElementById('skillsGrid');
+            grid.innerHTML = ALL_SKILLS.map(s =>
+                `<span class="chip" id="chip_${s.id}" onclick="toggleSkill('${s.id}')">${s.label}</span>`
+            ).join('');
+        }
+
+        function toggleSkill(id) {
+            const chip = document.getElementById('chip_' + id);
+            if (selectedSkills.has(id)) { selectedSkills.delete(id); chip.classList.remove('selected'); }
+            else { selectedSkills.add(id); chip.classList.add('selected'); }
+        }
+
+        function selectGoal(goal) {
+            selectedGoal = goal;
+            document.getElementById('goalLearn').classList.toggle('selected', goal === 'learn');
+            document.getElementById('goalShare').classList.toggle('selected', goal === 'share');
+            if (goal === 'share') {
+                document.getElementById('step3Title').textContent = '🛠️ What Skills Do You Have?';
+                document.getElementById('step3Sub').textContent = 'Select the skills you can teach or offer as services.';
+            } else {
+                document.getElementById('step3Title').textContent = '📚 What Do You Want to Learn?';
+                document.getElementById('step3Sub').textContent = 'Select the skills you want to learn or explore.';
+            }
+        }
+
+        function nextStep(from) {
+            if (from === 1) {
+                const fn = document.getElementById('s1_firstName').value.trim();
+                const age = document.getElementById('s1_age').value;
+                if (!fn || !age) { Toast.error('Please fill in your name and age.'); return; }
+            }
+            if (from === 2 && !selectedGoal) { Toast.error('Please select your goal.'); return; }
+            if (from === 3) {
+                const other = document.getElementById('otherSkills').value.trim();
+                if (other) other.split(',').forEach(s => selectedSkills.add(s.trim().toLowerCase().replace(' ', '_')));
+                if (selectedSkills.size === 0) { Toast.error('Please select at least one skill.'); return; }
+                renderVerifyStep();
+            }
+            showStep(from + 1);
+        }
+        function prevStep(from) { showStep(from - 1); }
+
+        function showStep(n) {
+            currentStep = n;
+            [1, 2, 3, 4].forEach(i => {
+                document.getElementById('step' + i).classList.toggle('hidden', i !== n);
+                const dot = document.getElementById('dot' + i);
+                dot.classList.toggle('active', i === n);
+                dot.classList.toggle('done', i < n);
+                if (i < 4) document.getElementById('line' + i).classList.toggle('done', i < n);
+            });
+        }
+
+        function renderVerifyStep() {
+            const verifiableSkills = ['python', 'javascript', 'react', 'web_development', 'java', 'data_science', 'machine_learning', 'design', 'marketing'];
+            const container = document.getElementById('selectedSkillsVerify');
+            const verifiable = [...selectedSkills].filter(s => verifiableSkills.includes(s));
+            if (verifiable.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-secondary);font-size:0.9rem;">No quiz available for your selected skills yet, but more are coming! Click below to save your profile.</p>';
+            } else {
+                container.innerHTML = verifiable.map(s => `
+        <div class="flex items-center justify-between card" style="padding:1rem;">
+          <span>${ALL_SKILLS.find(a => a.id === s)?.label || s}</span>
+          <span class="badge badge-amber">Quiz Available</span>
+        </div>`).join('');
+            }
+        }
+
+        function skipToProfile() {
+            saveProfileAndRedirect(false);
+        }
+
+        function startVerification() {
+            // Save profile first, then go to test
+            const profile = buildProfile();
+            localStorage.setItem('skillify_pending_profile', JSON.stringify(profile));
+            localStorage.setItem('skillify_test_skills', JSON.stringify([...selectedSkills]));
+            Profile.save(profile).then(() => {
+                window.location.href = 'test.html?source=onboarding';
+            });
+        }
+
+        function computeBadge(taskCount, linkedin, github) {
+            if (taskCount >= 55) return 'Platinum';
+            if (taskCount >= 45) return 'Diamond';
+            if (taskCount >= 30) return 'Gold';
+            if (taskCount >= 15) return 'Silver';
+            if (taskCount >= 5) return 'Iron';
+            if (linkedin || github) return 'Bronze';
+            return null;
+        }
+
+        function buildProfile() {
+            return {
+                uid: user.uid,
+                email: user.email,
+                name: (document.getElementById('s1_firstName').value + ' ' + document.getElementById('s1_lastName').value).trim(),
+                age: document.getElementById('s1_age').value,
+                country: document.getElementById('s1_country').value,
+                linkedin: document.getElementById('s1_linkedin').value,
+                github: document.getElementById('s1_github').value,
+                bio: document.getElementById('s1_bio').value,
+                achievements: document.getElementById('s1_achievements').value,
+                goal: selectedGoal,
+                skills: [...selectedSkills],
+                approved_skills: [],
+                task_count: 0,
+                badge: computeBadge(0, document.getElementById('s1_linkedin').value, document.getElementById('s1_github').value),
+                onboarded: true
+            };
+        }
+
+        function saveProfileAndRedirect(redirect = true) {
+            const profile = buildProfile();
+            Profile.save(profile).then(() => {
+                Toast.success('Profile saved!');
+                if (redirect) setTimeout(() => window.location.href = 'dashboard.html', 1000);
+            }).catch(() => {
+                Toast.error('Could not save profile. Check if backend is running.');
+            });
+        }
+    </script>
+</body>
+
+</html>

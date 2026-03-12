@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skillify – Share, Borrow & Master Skills</title>
+  <meta name="description" content="Skillify is the ultimate skill-sharing platform. Learn for free, hire experts, or take structured courses from verified professionals." />
+  <link rel="stylesheet" href="styles/main.css" />
+  <style>
+    /* Landing-specific styles */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: var(--radius-full);
+      padding: 0.4rem 1.1rem;
+      font-size: 0.82rem; font-weight: 600;
+      color: #a78bfa; margin-bottom: 2rem;
+      animation: fadeIn 0.8s ease;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 900; line-height: 1.05;
+      margin-bottom: 1.5rem;
+      animation: slideUp 0.8s ease 0.1s both;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto 2.5rem;
+      animation: slideUp 0.8s ease 0.2s both;
+    }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: slideUp 0.8s ease 0.3s both; }
+    .hero-stats {
+      display: flex; gap: 3rem; justify-content: center; margin-top: 4rem;
+      flex-wrap: wrap; animation: slideUp 0.8s ease 0.4s both;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      background: var(--grad-text); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* Floating skill chips in hero */
+    .hero-chips {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;
+      margin: 2rem auto; max-width: 600px;
+      animation: slideUp 0.8s ease 0.35s both;
+    }
+
+    /* Tiers section */
+    .tier-card {
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .tier-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .tier-free::before { background: var(--green); }
+    .tier-borrow::before { background: linear-gradient(90deg, var(--violet), var(--pink)); }
+    .tier-learn::before { background: linear-gradient(90deg, var(--amber), var(--pink)); }
+    .tier-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow-glow-hover);
+    }
+    .tier-icon {
+      font-size: 2.5rem; margin-bottom: 1rem;
+      display: block;
+    }
+    .tier-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .tier-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .tier-features { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tier-features li {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.875rem; color: var(--text-secondary);
+    }
+    .tier-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    /* How it works */
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+    .step { text-align: center; }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--grad-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: #fff;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+    }
+    .step h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+    .step p { font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* Testimonials */
+    .testimonial-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+    }
+    .testimonial-card p { color: var(--text-secondary); font-style: italic; margin-bottom: 1rem; }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center; padding: 5rem 1.5rem;
+      background: rgba(124,58,237,0.05);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 1rem; }
+    .cta-section p { color: var(--text-secondary); margin-bottom: 2rem; }
+
+    /* Footer */
+    footer {
+      padding: 2.5rem; text-align: center;
+      color: var(--text-muted); font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--violet-light); }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">✦ Skillify</a>
+  <div class="nav-links">
+    <a href="#tiers" class="nav-desktop">Features</a>
+    <a href="#how-it-works" class="nav-desktop">How It Works</a>
+    <a href="auth.html?mode=login" class="btn btn-glass btn-sm">Login</a>
+    <a href="auth.html?mode=register" class="btn btn-primary btn-sm">Get Started Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">🚀 Beta is Now Live – Join 2,400+ Members</div>
+    <h1>
+      Share, Borrow &<br />
+      <span class="gradient-text">Master Any Skill</span>
+    </h1>
+    <p>Connect with verified experts, learn from the community for free, hire talent for your projects, or take structured courses — all in one place.</p>
+    <div class="hero-chips">
+      <span class="chip selected">🐍 Python</span>
+      <span class="chip selected">⚛️ React</span>
+      <span class="chip">🎨 UI/UX</span>
+      <span class="chip">🤖 Machine Learning</span>
+      <span class="chip">☕ Java</span>
+      <span class="chip">📈 Marketing</span>
+      <span class="chip">🌐 Web Dev</span>
+      <span class="chip">📊 Data Science</span>
+    </div>
+    <div class="hero-cta">
+      <a href="auth.html?mode=register" class="btn btn-primary btn-lg">🚀 Start for Free</a>
+      <a href="#tiers" class="btn btn-outline btn-lg">Explore Features</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">2.4K+</div><div class="hero-stat-label">Members</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">180+</div><div class="hero-stat-label">Verified Skills</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">340+</div><div class="hero-stat-label">Projects Completed</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">96%</div><div class="hero-stat-label">Satisfaction Rate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="section" id="tiers">
+  <div class="container">
+    <div class="section-header">
+      <h2>Three Ways to <span class="gradient-text">Grow</span></h2>
+      <p>Whether you're learning, teaching, or building — Skillify has you covered.</p>
+    </div>
+    <div class="grid-3">
+
+      <!-- Tier 1: Free -->
+      <div class="tier-card tier-free slide-up">
+        <span class="tier-icon">🤝</span>
+        <div class="flex items-center gap-1 mb-2">
+          <h3>Skill Share</h3>
+          <span class="badge badge-free">FREE</span>
+        </div>
+        <p>A vibrant community where members freely share knowledge, ask questions, and learn from each other.</p>
+        <ul class="tier-features">
+          <li>Post tips, tutorials & Q&As</li>
+          <li>Community replies & discussions</li>
+          <li>Browse by skill category</li>
+          <li>Earn reputation points</li>
+        </ul>
+        <a href="auth.html?mode=register" class="btn btn-outline w-full">Join Community →</a>
+      </div>
+
+      <!-- Tier 2: Borrow -->
+      <div class="tier-card tier-borrow slide-up" style="animation-delay:0.1s">
+        <span class="tier-icon">💼</span>
+        <div class="flex items-center gap-1 mb-2">
+          <h3>Borrow a Skill</h3>
+          <span class="badge badge-paid">PAID</span>
+        </div>
+        <p>Need a developer, designer, or marketer? Post your project and get bids from verified skill holders.</p>
+        <ul class="tier-features">
+          <li>Post project requirements</li>
+          <li>Get bids from verified experts</li>
+          <li>Secure escrow payments</li>
+          <li>Review & rating system</li>
+        </ul>
+        <a href="auth.html?mode=register" class="btn btn-primary w-full">Post a Project →</a>
+      </div>
+
+      <!-- Tier 3: Learn -->
+      <div class="tier-card tier-learn slide-up" style="animation-delay:0.2s">
+        <span class="tier-icon">🎓</span>
+        <div class="flex items-center gap-1 mb-2">
+          <h3>Learn from Experts</h3>
+          <span class="badge badge-paid">PAID</span>
+        </div>
+        <p>Structured courses and live sessions from Skillify-verified instructors. Learn at your own pace.</p>
+        <ul class="tier-features">
+          <li>HD video courses</li>
+          <li>Verified instructor profiles</li>
+          <li>Certificate on completion</li>
+          <li>Starting from ₹999</li>
+        </ul>
+        <a href="auth.html?mode=register" class="btn btn-outline w-full">Browse Courses →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works" style="background: rgba(124,58,237,0.03);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Get Started in <span class="gradient-text">4 Steps</span></h2>
+      <p>From zero to verified skill holder in minutes.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step slide-up">
+        <div class="step-num">1</div>
+        <h4>Create Account</h4>
+        <p>Sign up with email or Google. Takes 30 seconds.</p>
+      </div>
+      <div class="step slide-up" style="animation-delay:0.1s">
+        <div class="step-num">2</div>
+        <h4>Build Your Profile</h4>
+        <p>Add your skills, LinkedIn, GitHub, and goals.</p>
+      </div>
+      <div class="step slide-up" style="animation-delay:0.2s">
+        <div class="step-num">3</div>
+        <h4>Verify Your Skills</h4>
+        <p>Take quick quizzes to earn verified badges.</p>
+      </div>
+      <div class="step slide-up" style="animation-delay:0.3s">
+        <div class="step-num">4</div>
+        <h4>Share or Earn</h4>
+        <p>Teach the community, take on projects, or enroll in courses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Loved by <span class="gradient-text">Learners & Experts</span></h2>
+    </div>
+    <div class="grid-3">
+      <div class="testimonial-card">
+        <p>"I landed 3 freelance projects in my first month after getting my Python badge verified. Clients trust the skill badges!"</p>
+        <div class="flex items-center gap-1">
+          <div class="avatar">A</div>
+          <div><strong>Amit K.</strong><br /><span class="txt-sm txt-muted">Python Developer</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card" style="animation-delay:0.1s">
+        <p>"The Skill Share community helped me learn React in 3 weeks for free. The discussions are incredibly high quality."</p>
+        <div class="flex items-center gap-1">
+          <div class="avatar" style="background: linear-gradient(135deg,#ec4899,#f59e0b)">S</div>
+          <div><strong>Sneha M.</strong><br /><span class="txt-sm txt-muted">Frontend Developer</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card" style="animation-delay:0.2s">
+        <p>"I teach UI/UX on Skillify and made ₹48,000 last month from courses alone. Amazing platform for instructors!"</p>
+        <div class="flex items-center gap-1">
+          <div class="avatar" style="background: linear-gradient(135deg,#10b981,#06b6d4)">V</div>
+          <div><strong>Vikram R.</strong><br /><span class="txt-sm txt-muted">UI/UX Instructor</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to Start Your <span class="gradient-text">Skill Journey?</span></h2>
+  <p>Join thousands of learners and experts. Skill Share is always free.</p>
+  <a href="auth.html?mode=register" class="btn btn-primary btn-lg">Create Free Account</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>✦ <strong>Skillify</strong> — Share, Borrow & Master Skills. Built with ❤️ in India.</p>
+  <p class="mt-1"><a href="auth.html?mode=login">Login</a> · <a href="auth.html?mode=register">Register</a></p>
+</footer>
+
+</body>
+</html>
