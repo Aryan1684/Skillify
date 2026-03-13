@@ -10,12 +10,12 @@ skill_bp = Blueprint('skill', __name__)
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 
 
-def _load(filename):
+def _load(filename, default_type=list):
     path = os.path.join(DATA_DIR, filename)
     if os.path.exists(path):
         with open(path, 'r') as f:
             return json.load(f)
-    return []
+    return default_type()
 
 
 def _save(filename, data):
@@ -28,7 +28,7 @@ def _save(filename, data):
 
 @skill_bp.route('/skill-share', methods=['GET'])
 def get_posts():
-    posts = _load('posts.json')
+    posts = _load('posts.json', list)
     skill_filter = request.args.get('skill', '').lower()
     if skill_filter:
         posts = [p for p in posts if skill_filter in p.get('skill', '').lower()]
@@ -38,7 +38,7 @@ def get_posts():
 @skill_bp.route('/skill-share', methods=['POST'])
 def create_post():
     data = request.get_json()
-    posts = _load('posts.json')
+    posts = _load('posts.json', list)
     post = {
         "id": str(uuid.uuid4()),
         "author": data.get('author', 'Anonymous'),
@@ -47,21 +47,41 @@ def create_post():
         "skill": data.get('skill', 'General'),
         "title": data.get('title', ''),
         "content": data.get('content', ''),
-        "type": data.get('type', 'share'),  # 'share' | 'question' | 'tip'
+        "type": data.get('type', 'share'),
         "tags": data.get('tags', []),
-        "likes": 0,
+        "upvotes": [], # Store UIDs for Reddit-style voting
         "replies": [],
         "created_at": datetime.utcnow().isoformat()
     }
-    posts.append(post)
+    posts.insert(0, post) # Newest first
     _save('posts.json', posts)
     return jsonify(post), 201
+
+
+@skill_bp.route('/skill-share/<post_id>/upvote', methods=['POST'])
+def upvote_post(post_id):
+    uid = request.get_json().get('uid')
+    if not uid:
+        return jsonify({"error": "UID required"}), 400
+    posts = _load('posts.json', list)
+    for p in posts:
+        if p['id'] == post_id:
+            if 'upvotes' not in p:
+                p['upvotes'] = []
+            # Toggle upvote
+            if uid in p['upvotes']:
+                p['upvotes'].remove(uid)
+            else:
+                p['upvotes'].append(uid)
+            _save('posts.json', posts)
+            return jsonify({"id": post_id, "upvotes": p['upvotes']})
+    return jsonify({"error": "Post not found"}), 404
 
 
 @skill_bp.route('/skill-share/<post_id>/reply', methods=['POST'])
 def add_reply(post_id):
     data = request.get_json()
-    posts = _load('posts.json')
+    posts = _load('posts.json', list)
     for post in posts:
         if post['id'] == post_id:
             reply = {"author": data.get('author', 'Anonymous'),
@@ -77,14 +97,14 @@ def add_reply(post_id):
 
 @skill_bp.route('/borrow', methods=['GET'])
 def get_projects():
-    projects = _load('projects.json')
+    projects = _load('projects.json', list)
     return jsonify(sorted(projects, key=lambda x: x['created_at'], reverse=True))
 
 
 @skill_bp.route('/borrow', methods=['POST'])
 def post_project():
     data = request.get_json()
-    projects = _load('projects.json')
+    projects = _load('projects.json', list)
     project = {
         "id": str(uuid.uuid4()),
         "client": data.get('client', 'Anonymous'),
@@ -106,7 +126,7 @@ def post_project():
 @skill_bp.route('/borrow/<project_id>/bid', methods=['POST'])
 def place_bid(project_id):
     data = request.get_json()
-    projects = _load('projects.json')
+    projects = _load('projects.json', list)
     for project in projects:
         if project['id'] == project_id:
             bid = {"bidder": data.get('bidder', ''),
@@ -146,7 +166,7 @@ SEED_COURSES = [
 
 @skill_bp.route('/courses', methods=['GET'])
 def get_courses():
-    courses = _load('courses.json')
+    courses = _load('courses.json', list)
     if not courses:
         _save('courses.json', SEED_COURSES)
         courses = SEED_COURSES
@@ -165,3 +185,44 @@ def request_course_session(course_id):
         "course_id": course_id,
         "uid": data.get('uid', '')
     })
+
+
+# ── SKILL COINS (Gamification) ────────────────────────────────────────────────
+
+@skill_bp.route('/coins/award', methods=['POST'])
+def award_coins():
+    data = request.get_json()
+    uid = data.get('uid')
+    amount = data.get('amount', 0)
+    
+    if not uid or not amount:
+        return jsonify({"error": "Missing uid or amount"}), 400
+        
+    coins_db = _load('coins.json')
+    if isinstance(coins_db, list): 
+        # Convert to dict if it was accidentally created as an empty list by _load
+        coins_db = {}
+        
+    current_balance = coins_db.get(uid, 0)
+    new_balance = current_balance + amount
+    coins_db[uid] = new_balance
+    
+    _save('coins.json', coins_db)
+    
+    return jsonify({
+        "success": True,
+        "uid": uid,
+        "amount_awarded": amount,
+        "new_balance": new_balance
+    })
+
+@skill_bp.route('/coins/<uid>', methods=['GET'])
+def get_coins(uid):
+    coins_db = _load('coins.json')
+    if isinstance(coins_db, list): 
+        coins_db = {}
+    return jsonify({
+        "uid": uid,
+        "balance": coins_db.get(uid, 0)
+    })
+
