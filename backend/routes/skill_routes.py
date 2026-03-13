@@ -156,13 +156,12 @@ def get_courses():
     return jsonify(courses)
 
 
-@skill_bp.route('/courses/<course_id>/enroll', methods=['POST'])
-def enroll_course(course_id):
+@skill_bp.route('/courses/<course_id>/request_session', methods=['POST'])
+def request_course_session(course_id):
     data = request.get_json()
-    # Demo: just return success (real: process payment then enroll)
     return jsonify({
         "success": True,
-        "message": f"✅ Enrolled! Payment of ₹{data.get('amount', '?')} would be processed via Razorpay.",
+        "message": "✅ Session Access Granted! Your community post has been created for the session.",
         "course_id": course_id,
         "uid": data.get('uid', '')
     })

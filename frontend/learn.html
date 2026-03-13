@@ -15,7 +15,7 @@
         .hero-mini {
             text-align: center;
             padding: 2.5rem 1.5rem;
-            background: rgba(124, 58, 237, 0.06);
+            background: rgba(124, 58, 237, 0.07);
             border-bottom: 1px solid var(--border);
             margin-bottom: 2rem;
         }
@@ -77,7 +77,7 @@
             align-items: center;
             justify-content: center;
             font-size: 4rem;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(79, 70, 229, 0.15));
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(236, 72, 153, 0.12));
         }
 
         .course-body {
@@ -166,7 +166,7 @@
         .payment-option:hover,
         .payment-option.selected {
             border-color: var(--violet);
-            background: rgba(124, 58, 237, 0.1);
+            background: rgba(124, 58, 237, 0.12);
         }
 
         .payment-icon {
@@ -178,7 +178,7 @@
 <body>
 
     <nav class="nav">
-        <a href="index.html" class="nav-logo">✦ Skillify</a>
+        <a href="index.html" class="nav-logo">Skillify</a>
         <div class="nav-links">
             <a href="skill-share.html">Community</a>
             <a href="borrow.html">Borrow</a>
@@ -190,9 +190,9 @@
 
     <div class="hero-mini">
         <h1>🎓 Learn from <span class="gradient-text">Verified Experts</span></h1>
-        <p class="txt-muted txt-sm">Structured courses and sessions from Skillify-verified instructors.</p>
+        <p class="txt-muted txt-sm">Request customized learning sessions from Skillify-verified instructors.</p>
         <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;">
-            <input class="form-input" id="courseSearch" placeholder="🔍 Search courses..." style="max-width:300px;"
+            <input class="form-input" id="courseSearch" placeholder="🔍 Search sessions..." style="max-width:300px;"
                 oninput="renderCourses()" />
         </div>
     </div>
@@ -201,7 +201,7 @@
         <div class="container">
             <!-- Categories -->
             <div class="categories">
-                <button class="cat-btn active" onclick="setCat('all',this)">All Courses</button>
+                <button class="cat-btn active" onclick="setCat('all',this)">All Sessions</button>
                 <button class="cat-btn" onclick="setCat('Python',this)">🐍 Python</button>
                 <button class="cat-btn" onclick="setCat('JavaScript',this)">⚡ JavaScript</button>
                 <button class="cat-btn" onclick="setCat('Design',this)">🎨 Design</button>
@@ -212,6 +212,32 @@
 
             <div style="margin-bottom:1rem;color:var(--text-muted);font-size:0.85rem;" id="courseCount"></div>
             <div class="courses-grid" id="coursesGrid"></div>
+
+            <!-- Community Request Card -->
+            <div id="communityRequestCard" style="
+                margin-top: 3rem;
+                padding: 2.5rem 2rem;
+                background: linear-gradient(135deg, rgba(124,58,237,0.10), rgba(236,72,153,0.08));
+                border: 1px dashed rgba(167,139,250,0.35);
+                border-radius: var(--radius-xl);
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            ">
+                <div style="font-size:3rem;margin-bottom:0.75rem;">🔍</div>
+                <h2 style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;">
+                    Can't find what you're looking for?
+                </h2>
+                <p style="color:var(--text-secondary);font-size:0.92rem;max-width:480px;margin:0 auto 1.5rem;">
+                    Post a request to the Skillify community — a verified expert or fellow learner might be available to teach you exactly what you need!
+                </p>
+                <button class="btn btn-primary" onclick="openCustomRequestModal()" style="font-size:0.95rem;">
+                    ✨ Post a Custom Request
+                </button>
+                <!-- decorative orb -->
+                <div style="position:absolute;width:220px;height:220px;background:radial-gradient(circle,rgba(236,72,153,0.12) 0%,transparent 70%);top:-60px;right:-60px;pointer-events:none;"></div>
+                <div style="position:absolute;width:180px;height:180px;background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 70%);bottom:-50px;left:-50px;pointer-events:none;"></div>
+            </div>
         </div>
     </div>
 
@@ -219,7 +245,7 @@
     <div class="modal-overlay hidden" id="enrollModal">
         <div class="modal">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
-                <h3 style="font-size:1.1rem;">🎓 Enroll in Course</h3>
+                <h3 style="font-size:1.1rem;">🎓 Request Learning Session</h3>
                 <button onclick="closeEnrollModal()"
                     style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;">✕</button>
             </div>
@@ -227,25 +253,31 @@
                 style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.3);border-radius:var(--radius-md);padding:1rem;margin-bottom:1.25rem;">
                 <div style="font-weight:700;" id="enrollCourseName"></div>
                 <div style="font-size:0.83rem;color:var(--text-muted);" id="enrollCourseInstructor"></div>
-                <div style="font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;margin-top:0.5rem;"
-                    id="enrollCoursePrice"></div>
             </div>
-            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:1rem;">Choose payment method:</p>
-            <div class="payment-option selected" id="pay1" onclick="selectPayment(this)">
-                <span class="payment-icon">📱</span>
-                <div><strong>Razorpay UPI</strong><br /><span style="font-size:0.78rem;color:var(--text-muted);">Pay via
-                        UPI, Net Banking, Card</span></div>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">Requested Duration (e.g., 2 hours):</p>
+            <input type="text" id="sessionRequestDuration" class="form-input" placeholder="How many hours or days do you need?" style="width:100%;margin-bottom:1rem;" />
+            
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">Add a message to the community (optional):</p>
+            <textarea id="sessionRequestMessage" class="form-input" rows="3" placeholder="Hi community, I'd like to request a session on this topic!" style="width:100%;resize:none;margin-bottom:1rem;"></textarea>
+            <button class="btn btn-primary w-full" onclick="confirmEnroll()">📝 Post Request & Get Session</button>
+        </div>
+    </div>
+
+    <!-- Custom Topic Request Modal -->
+    <div class="modal-overlay hidden" id="customRequestModal">
+        <div class="modal">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+                <h3 style="font-size:1.1rem;">✨ Post a Custom Learning Request</h3>
+                <button onclick="closeCustomRequestModal()"
+                    style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;">✕</button>
             </div>
-            <div class="payment-option" id="pay2" onclick="selectPayment(this)">
-                <span class="payment-icon">💳</span>
-                <div><strong>Credit / Debit Card</strong><br /><span
-                        style="font-size:0.78rem;color:var(--text-muted);">Visa, Mastercard, Rupay</span></div>
-            </div>
-            <div
-                style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:var(--radius-md);padding:0.75rem;font-size:0.8rem;color:#fbbf24;margin:1rem 0;">
-                ⚠️ Demo Mode: No actual payment will be processed. Click "Enroll Now" to simulate.
-            </div>
-            <button class="btn btn-primary w-full" onclick="confirmEnroll()">🚀 Enroll Now</button>
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">What skill or topic do you want to learn?</p>
+            <input type="text" id="customTopic" class="form-input" placeholder="e.g. Advanced React, Graphic Design, Spoken English..." style="width:100%;margin-bottom:1rem;" />
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">Preferred Duration</p>
+            <input type="text" id="customDuration" class="form-input" placeholder="e.g. 3 hours, 1 week..." style="width:100%;margin-bottom:1rem;" />
+            <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:0.5rem;">Describe what you need (optional)</p>
+            <textarea id="customMessage" class="form-input" rows="3" placeholder="Share more details so the community can help you better!" style="width:100%;resize:none;margin-bottom:1rem;"></textarea>
+            <button class="btn btn-primary w-full" onclick="submitCustomRequest()">📢 Post to Community</button>
         </div>
     </div>
 
@@ -287,7 +319,7 @@
                 if (search && !c.title.toLowerCase().includes(search) && !c.instructor.toLowerCase().includes(search)) return false;
                 return true;
             });
-            document.getElementById('courseCount').textContent = `Showing ${courses.length} course${courses.length !== 1 ? 's' : ''}`;
+            document.getElementById('courseCount').textContent = `Showing ${courses.length} session${courses.length !== 1 ? 's' : ''}`;
             document.getElementById('coursesGrid').innerHTML = courses.map(c => `
       <div class="course-card">
         <div class="course-thumb">${c.thumbnail}</div>
@@ -295,7 +327,6 @@
           <div class="course-title">${c.title}</div>
           <div class="course-instructor">👨‍🏫 ${c.instructor}</div>
           <div class="course-meta">
-            <span>⏱ ${c.duration}</span>
             <span>📊 ${c.level}</span>
             <span>👥 ${c.students.toLocaleString()} students</span>
           </div>
@@ -306,40 +337,92 @@
           </div>
           <div class="course-footer">
             <span class="course-price">₹${c.price.toLocaleString()}</span>
-            <button class="btn btn-primary btn-sm" onclick="openEnroll('${c.id}')">Enroll →</button>
+            <button class="btn btn-primary btn-sm" onclick="openEnroll('${c.id}')">Request Session →</button>
           </div>
         </div>
       </div>`).join('');
         }
 
         function openEnroll(courseId) {
-            if (!user) { Toast.error('Please login to enroll.'); window.location.href = 'auth.html'; return; }
+            if (!user) { Toast.error('Please login to request a session.'); window.location.href = 'auth.html'; return; }
             const c = allCourses.find(x => x.id === courseId);
             if (!c) return;
             enrollTarget = c;
             document.getElementById('enrollCourseName').textContent = c.title;
             document.getElementById('enrollCourseInstructor').textContent = '👨‍🏫 ' + c.instructor;
-            document.getElementById('enrollCoursePrice').textContent = '₹' + c.price.toLocaleString();
             document.getElementById('enrollModal').classList.remove('hidden');
+            document.getElementById('sessionRequestDuration').value = '';
+            document.getElementById('sessionRequestMessage').value = '';
         }
 
         function closeEnrollModal() { document.getElementById('enrollModal').classList.add('hidden'); }
 
-        function selectPayment(el) {
-            document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
         async function confirmEnroll() {
             if (!enrollTarget) return;
+            const requestedDur = document.getElementById('sessionRequestDuration').value.trim() || 'Not specified';
             try {
-                await fetch(`${BACKEND_URL}/courses/${enrollTarget.id}/enroll`, {
+                const msg = document.getElementById('sessionRequestMessage').value.trim() || `Hi community, I'd like to request a session for "${enrollTarget.title}".`;
+                const post = {
+                    author: userProfile?.name || user?.email?.split('@')[0] || 'Learner',
+                    avatar: ((userProfile?.name || 'L').charAt(0)).toUpperCase(),
+                    skill: enrollTarget.skill.toLowerCase().replace(' ', '_'),
+                    type: 'question',
+                    title: `Session Request: ${enrollTarget.title}`,
+                    content: `${msg}\n\nRequested Duration: ${requestedDur}`,
+                    uid: user.uid
+                };
+                await fetch(`${BACKEND_URL}/skill-share`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid: user.uid, amount: enrollTarget.price })
+                    body: JSON.stringify(post)
                 });
-            } catch { }
+                await fetch(`${BACKEND_URL}/courses/${enrollTarget.id}/request_session`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: user.uid })
+                });
+            } catch (e) {
+                console.error(e);
+            }
             closeEnrollModal();
-            Toast.success(`🎉 Enrolled in "${enrollTarget.title}"! (Demo – no payment needed)`);
+            Toast.success(`🎉 Session Access Granted! Find your request in Community.`);
+        }
+
+        function openCustomRequestModal() {
+            if (!user) { Toast.error('Please login to post a request.'); window.location.href = 'auth.html'; return; }
+            document.getElementById('customTopic').value = '';
+            document.getElementById('customDuration').value = '';
+            document.getElementById('customMessage').value = '';
+            document.getElementById('customRequestModal').classList.remove('hidden');
+        }
+
+        function closeCustomRequestModal() {
+            document.getElementById('customRequestModal').classList.add('hidden');
+        }
+
+        async function submitCustomRequest() {
+            const topic = document.getElementById('customTopic').value.trim();
+            if (!topic) { Toast.error('Please enter a topic!'); return; }
+            const duration = document.getElementById('customDuration').value.trim() || 'Not specified';
+            const message = document.getElementById('customMessage').value.trim() || `Hi community, I'd like someone to teach me: ${topic}`;
+            try {
+                const post = {
+                    author: userProfile?.name || user?.email?.split('@')[0] || 'Learner',
+                    avatar: ((userProfile?.name || 'L').charAt(0)).toUpperCase(),
+                    skill: 'general',
+                    type: 'question',
+                    title: `Custom Learn Request: ${topic}`,
+                    content: `${message}\n\nPreferred Duration: ${duration}`,
+                    uid: user.uid
+                };
+                await fetch(`${BACKEND_URL}/skill-share`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(post)
+                });
+                closeCustomRequestModal();
+                Toast.success('🎉 Your request has been posted to the community!');
+            } catch (e) {
+                console.error(e);
+                Toast.error('Failed to post request. Please try again.');
+            }
         }
 
         function setCat(cat, btn) {
