@@ -78,7 +78,7 @@
             border-radius: var(--radius-full);
             padding: 0.3rem 0.8rem;
             font-size: 0.78rem;
-            color: #a78bfa;
+            color: var(--violet);
             margin-bottom: 1rem;
         }
 
@@ -101,7 +101,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.82rem;
-            color: var(--violet-light);
+            color: var(--violet);
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             padding: 0.4rem 0.75rem;
@@ -131,8 +131,8 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            background: rgba(124, 58, 237, 0.08);
-            border: 1px solid rgba(124, 58, 237, 0.25);
+            background: rgba(124, 58, 237, 0.05);
+            border: 1px solid rgba(124, 58, 237, 0.2);
             border-radius: var(--radius-md);
             padding: 0.9rem 1.1rem;
             margin-bottom: 0.75rem;
@@ -324,7 +324,7 @@
           <span class="badge badge-green" style="margin-left:auto;">Verified ✓</span>
         </div>`).join('');
             } else {
-                document.getElementById('verifiedBadgesContainer').innerHTML = '<p class="txt-sm txt-muted">No verified badges yet. <a href="test.html" style="color:var(--violet-light);">Take a quiz →</a></p>';
+                document.getElementById('verifiedBadgesContainer').innerHTML = '<p class="txt-sm txt-muted">No verified badges yet. <a href="test.html" style="color:var(--violet);">Take a quiz →</a></p>';
             }
 
             // Skills chips

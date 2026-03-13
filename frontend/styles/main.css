@@ -7,10 +7,11 @@
 
 /* ── CSS Variables ── */
 :root {
-    --bg-primary: #08080f;
-    --bg-secondary: #0d0d1a;
-    --bg-card: rgba(255, 255, 255, 0.04);
-    --bg-card-hover: rgba(255, 255, 255, 0.07);
+    /* ── Light Theme Design System ── */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
 
     --violet: #7c3aed;
     --violet-light: #9b5de5;
@@ -21,20 +22,20 @@
     --red: #ef4444;
     --cyan: #06b6d4;
 
-    --grad-primary: linear-gradient(135deg, #7c3aed, #4f46e5, #06b6d4);
-    --grad-card: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(79, 70, 229, 0.1));
-    --grad-text: linear-gradient(135deg, #a78bfa, #818cf8, #67e8f9);
+    --grad-primary: linear-gradient(135deg, #7c3aed, #4f46e5);
+    --grad-card: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(79, 70, 229, 0.03));
+    --grad-text: linear-gradient(135deg, #4f46e5, #7c3aed);
 
-    --text-primary: #f1f0fe;
-    --text-secondary: #a0a0c0;
-    --text-muted: #5c5c80;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
 
-    --border: rgba(255, 255, 255, 0.08);
-    --border-active: rgba(124, 58, 237, 0.5);
+    --border: #e2e8f0;
+    --border-active: #7c3aed;
 
-    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 40px rgba(124, 58, 237, 0.25);
-    --shadow-glow-hover: 0 0 60px rgba(124, 58, 237, 0.4);
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.08);
 
     --radius-sm: 8px;
     --radius-md: 14px;
@@ -144,11 +145,11 @@ body::after {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--violet);
+    background: #cbd5e1;
     border-radius: 3px;
 }
 
@@ -183,7 +184,7 @@ h6 {
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    background: rgba(8, 8, 15, 0.8);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     transition: var(--transition);
@@ -842,27 +843,27 @@ h6 {
 }
 
 .badge-tier.silver {
-    background: rgba(148, 163, 184, 0.15);
-    color: #cbd5e1;
-    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(100, 116, 139, 0.1);
+    color: #475569;
+    border: 1px solid rgba(100, 116, 139, 0.3);
 }
 
 .badge-tier.gold {
-    background: rgba(251, 191, 36, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(251, 191, 36, 0.4);
+    background: rgba(180, 83, 9, 0.1);
+    color: #b45309;
+    border: 1px solid rgba(180, 83, 9, 0.3);
 }
 
 .badge-tier.diamond {
-    background: rgba(103, 232, 249, 0.15);
-    color: #67e8f9;
-    border: 1px solid rgba(103, 232, 249, 0.4);
+    background: rgba(8, 145, 178, 0.1);
+    color: #0891b2;
+    border: 1px solid rgba(8, 145, 178, 0.3);
 }
 
 .badge-tier.platinum {
-    background: rgba(167, 139, 250, 0.15);
-    color: #a78bfa;
-    border: 1px solid rgba(167, 139, 250, 0.4);
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+    border: 1px solid rgba(124, 58, 237, 0.3);
 }
 
 /* Badge card for display */

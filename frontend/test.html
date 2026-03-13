@@ -59,7 +59,7 @@
 
         .skill-sel-card.selected {
             border-color: var(--violet);
-            background: rgba(124, 58, 237, 0.15);
+            background: rgba(124, 58, 237, 0.08);
         }
 
         .skill-sel-card .sci {
@@ -107,12 +107,12 @@
         }
 
         .question-card {
-            background: rgba(13, 13, 26, 0.9);
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius-xl);
             padding: 2.5rem;
             backdrop-filter: blur(30px);
-            box-shadow: var(--shadow-glow);
+            box-shadow: var(--shadow-premium);
         }
 
         .q-text {
@@ -135,7 +135,7 @@
             gap: 1rem;
             padding: 1rem 1.25rem;
             border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.04);
+            background: #f1f5f9;
             border: 1.5px solid var(--border);
             color: var(--text-primary);
             font-size: 0.9rem;
@@ -152,20 +152,20 @@
 
         .option-btn.selected {
             border-color: var(--violet);
-            background: rgba(124, 58, 237, 0.2);
-            color: #a78bfa;
+            background: rgba(124, 58, 237, 0.08);
+            color: var(--violet);
         }
 
         .option-btn.correct {
             border-color: var(--green);
-            background: rgba(16, 185, 129, 0.15);
-            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
         }
 
         .option-btn.wrong {
             border-color: var(--red);
-            background: rgba(239, 68, 68, 0.1);
-            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.05);
+            color: #dc2626;
         }
 
         .option-letter {
@@ -200,7 +200,7 @@
             font-size: 2.5rem;
             font-weight: 900;
             position: relative;
-            box-shadow: 0 0 40px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 4px 25px rgba(124, 58, 237, 0.25);
         }
 
         .score-circle::before {
@@ -245,7 +245,7 @@
             
             <div style="margin-bottom: 1.5rem;">
                 <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block;">Or type any custom skill (AI Generated):</label>
-                <input type="text" id="customSkillInput" class="form-input" placeholder="e.g. Docker, Figma, Cybersecurity..." style="width: 100%; border: 1px solid var(--border); padding: 0.75rem; border-radius: var(--radius-md); background: rgba(255,255,255,0.05); color: #fff;" oninput="clearSelection()">
+                <input type="text" id="customSkillInput" class="form-input" placeholder="e.g. Docker, Figma, Cybersecurity..." style="width: 100%; border: 1px solid var(--border); padding: 0.75rem; border-radius: var(--radius-md); background: #f8fafc; color: var(--text-primary);" oninput="clearSelection()">
             </div>
 
             <button class="btn btn-primary w-full" onclick="startQuiz()">Start Quiz →</button>
@@ -284,8 +284,8 @@
                     ✅ Skill Officially Approved
                 </div>
                 <div
-                    style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-md);padding:1rem;margin:0.75rem 0 1.25rem;font-size:0.82rem;color:var(--text-secondary);text-align:left;">
-                    🏆 <strong style="color:#a78bfa;">Earn your badge through tasks:</strong> Complete 5 tasks → Iron |
+                    style="background:rgba(124,58,237,0.05);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-md);padding:1rem;margin:0.75rem 0 1.25rem;font-size:0.82rem;color:var(--text-secondary);text-align:left;">
+                    🏆 <strong style="color:var(--violet);">Earn your badge through tasks:</strong> Complete 5 tasks → Iron |
                     15 → Silver | 30 → Gold | 45 → Diamond | 55+ → Platinum
                 </div>
                 <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;">
@@ -461,7 +461,7 @@
             document.getElementById('resultsArea').classList.remove('hidden');
             document.getElementById('scoreNum').textContent = score + '%';
             document.getElementById('scoreCircle').style.background =
-                `conic-gradient(${passed ? 'var(--green)' : 'var(--red)'} ${score * 3.6}deg, rgba(255,255,255,0.05) 0deg)`;
+                `conic-gradient(${passed ? 'var(--green)' : 'var(--red)'} ${score * 3.6}deg, #f1f5f9 0deg)`;
             document.getElementById('resultEmoji').textContent = passed ? '✅' : '💪';
             document.getElementById('resultTitle').textContent = passed ? 'Skill Approved!' : 'Keep Practicing!';
             document.getElementById('resultMsg').textContent = passed

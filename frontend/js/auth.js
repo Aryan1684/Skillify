@@ -98,8 +98,20 @@ const Auth = {
         const user = this.getCurrentUser();
         if (!user) { window.location.href = 'auth.html'; return null; }
         return user;
+    },
+    
+    // Automatically init coins if user exists on page load
+    initCoinsIfLoggedIn() {
+        const user = this.getCurrentUser();
+        if (user && user.uid) {
+            // Delay slightly to ensure DOM & BACKEND_URL are ready
+            setTimeout(() => SkillCoins.initNav(user.uid), 100);
+        }
     }
 };
+
+// Auto-run on script load
+Auth.initCoinsIfLoggedIn();
 
 // ── Profile Helpers ────────────────────────────────────────────────────────
 
@@ -163,6 +175,87 @@ const Toast = {
     success(msg) { this.show(msg, 'success'); },
     error(msg) { this.show(msg, 'error'); },
     info(msg) { this.show(msg, 'info'); }
+};
+
+// ── Skill Coins Gamification ───────────────────────────────────────────────
+
+const SkillCoins = {
+    async getBalance(uid) {
+        if (!uid) return 0;
+        try {
+            const res = await fetch(`${BACKEND_URL}/coins/${uid}`);
+            if (res.ok) {
+                const data = await res.json();
+                localStorage.setItem(`skillify_coins_${uid}`, data.balance);
+                return data.balance;
+            }
+        } catch (e) { console.warn('Backend coins fetch failed, using local'); }
+        
+        return parseInt(localStorage.getItem(`skillify_coins_${uid}`) || '0', 10);
+    },
+
+    async award(uid, amount, reason) {
+        if (!uid) return;
+        let newBalance = 0;
+        
+        try {
+            const res = await fetch(`${BACKEND_URL}/coins/award`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ uid, amount, reason })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                newBalance = data.new_balance;
+            } else { throw new Error('Backend failed'); }
+        } catch (e) {
+            // Offline/demo fallback
+            const current = parseInt(localStorage.getItem(`skillify_coins_${uid}`) || '0', 10);
+            newBalance = current + amount;
+        }
+        
+        localStorage.setItem(`skillify_coins_${uid}`, newBalance);
+        this.updateNavBadge(newBalance);
+        Toast.success(`🪙 +${amount} Skill Coins earned! ${reason}`);
+        return newBalance;
+    },
+
+    async initNav(uid) {
+        if (!uid) return;
+        const balance = await this.getBalance(uid);
+        
+        // Find navbar links container
+        const navLinks = document.querySelector('.nav-links');
+        if (!navLinks) return;
+        
+        // Check if badge already exists
+        let badge = document.getElementById('navCoinsBadge');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.id = 'navCoinsBadge';
+            badge.className = 'badge badge-amber';
+            badge.style.cursor = 'help';
+            badge.title = 'Skill Coins earned through learning and teaching';
+            // Insert right before the Dashboard button or at the end
+            const dashBtn = Array.from(navLinks.children).find(el => el.textContent.includes('Dashboard') || el.href?.includes('dashboard'));
+            if (dashBtn) {
+                navLinks.insertBefore(badge, dashBtn);
+            } else {
+                navLinks.appendChild(badge);
+            }
+        }
+        this.updateNavBadge(balance);
+    },
+    
+    updateNavBadge(balance) {
+        const badge = document.getElementById('navCoinsBadge');
+        if (badge) {
+            badge.innerHTML = `🪙 <span style="font-weight:700">${balance.toLocaleString()}</span>`;
+            // Quick pulse animation
+            badge.style.transform = 'scale(1.1)';
+            setTimeout(() => badge.style.transform = 'scale(1)', 200);
+        }
+    }
 };
 
 // Initialize toast

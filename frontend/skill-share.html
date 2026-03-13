@@ -14,252 +14,306 @@
 
         .ss-layout {
             display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 1.5rem;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
         }
 
         @media (max-width: 768px) {
             .ss-layout {
                 grid-template-columns: 1fr;
             }
-
-            .sidebar {
-                order: -1;
-            }
         }
 
-        /* Post card */
+        /* Engaging Post card - Reddit/Linear style */
         .post-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            transition: var(--transition);
-            margin-bottom: 1rem;
+            border-radius: 12px;
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-card);
         }
 
         .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-premium);
             border-color: var(--border-active);
+        }
+
+        /* Voting Pillar */
+        .voting-pillar {
+            background: #f1f5f9;
+            width: 48px;
+            padding: 1rem 0.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            border-right: 1px solid var(--border);
+        }
+
+        .vote-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 6px;
+            transition: 0.2s;
+            line-height: 1;
+        }
+
+        .vote-btn:hover {
+            background: #e2e8f0;
+            color: var(--violet);
+        }
+
+        .vote-btn.upvoted {
+            color: #ff4500;
+            background: #ff450015;
+        }
+
+        .vote-count {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        /* Post content area */
+        .post-main {
+            flex: 1;
+            padding: 1.25rem 1.5rem;
         }
 
         .post-header {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .post-meta {
-            flex: 1;
-        }
-
-        .post-meta .post-author {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .post-meta .post-time {
-            font-size: 0.78rem;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
+        }
+
+        .post-header strong {
+            color: #1e293b;
         }
 
         .post-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.05rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
+            color: #0f172a;
+            line-height: 1.4;
         }
 
         .post-content {
-            color: var(--text-secondary);
-            font-size: 0.88rem;
+            color: #475569;
+            font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag-chip {
+            background: #f5f3ff;
+            color: #7c3aed;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #ddd6fe;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tag-chip:hover {
+            background: #ede9fe;
+            transform: scale(1.05);
         }
 
         .post-footer {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
         }
 
         .post-action {
             background: none;
             border: none;
-            color: var(--text-muted);
+            color: #64748b;
             font-size: 0.82rem;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
-            transition: var(--transition);
-            padding: 0.3rem 0.6rem;
-            border-radius: var(--radius-sm);
+            gap: 0.5rem;
+            transition: 0.2s;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
         }
 
         .post-action:hover {
-            color: var(--violet-light);
-            background: rgba(124, 58, 237, 0.1);
+            background: #f8fafc;
+            color: var(--violet);
         }
 
-        .post-type-badge {
-            font-size: 0.72rem;
-        }
-
-        /* Create post */
+        /* Create post engaging redesign */
         .create-post {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: border-color 0.3s;
+        }
+
+        .create-post:focus-within {
+            border-color: var(--violet);
         }
 
         .post-compose {
             display: flex;
-            gap: 1rem;
-            align-items: flex-start;
+            gap: 1.25rem;
         }
 
         .compose-input {
             flex: 1;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 1rem;
             resize: none;
             font-family: inherit;
+            transition: 0.3s;
         }
 
         .compose-input:focus {
+            background: #fff;
             border-color: var(--violet);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
             outline: none;
         }
 
         .compose-actions {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
+            gap: 0.75rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
-            align-items: center;
         }
 
-        /* Sidebar */
+        /* Sidebar engaging */
         .sidebar-card {
-            background: var(--bg-card);
+            background: #ffffff;
             border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-card);
         }
 
         .sidebar-card h4 {
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .topic-chip {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.4rem 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.83rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.25rem;
+            transition: 0.2s;
         }
 
-        .topic-chip:last-child {
-            border-bottom: none;
+        .topic-chip:hover {
+            background: #f1f5f9;
         }
 
-        .topic-chip a {
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-
-        .topic-chip a:hover {
-            color: var(--violet-light);
-        }
-
-        .topic-count {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-        }
-
-        /* Filter bar */
         .filter-bar {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 0.4rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            width: fit-content;
         }
 
         .filter-btn {
-            padding: 0.4rem 1rem;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            font-size: 0.82rem;
-            cursor: pointer;
-            transition: var(--transition);
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.2s;
         }
 
-        .filter-btn:hover,
+        .filter-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
         .filter-btn.active {
-            background: rgba(124, 58, 237, 0.15);
-            border-color: var(--violet);
-            color: #a78bfa;
+            background: #ffffff;
+            color: var(--violet);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         /* Replies */
         .reply-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
             margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .reply-item {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
         }
 
         .reply-content {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            padding: 0.6rem 0.9rem;
-            font-size: 0.85rem;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            padding: 0.75rem 1rem;
         }
 
-        .reply-content strong {
-            font-size: 0.8rem;
-            color: var(--violet-light);
+        .form-input {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
         }
 
-        .reply-input-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .reply-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 0.5rem 0.75rem;
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            font-family: inherit;
-        }
-
-        .reply-input:focus {
+        .form-input:focus {
+            background: #ffffff;
             border-color: var(--violet);
-            outline: none;
+        }
+
+        /* Animations */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .upvoted-pop {
+            animation: pop 0.3s ease;
         }
     </style>
 </head>
@@ -302,10 +356,12 @@
                                 <textarea class="compose-input" id="postContent" rows="2"
                                     placeholder="Share a skill tip, ask a question, or start a discussion..."></textarea>
                                 <div class="compose-actions">
-                                    <input class="form-input" id="postTitle" placeholder="Post title (required)"
+                                    <input class="form-input" id="postTitle" placeholder="Thread Title (Required)"
                                         style="flex:1;min-width:150px;" />
+                                    <input class="form-input" id="postTags" placeholder="Tags (e.g. #AI, #Web3)"
+                                        style="width:200px;" />
                                     <select class="form-input form-select" id="postSkill" style="width:140px;">
-                                        <option value="">Any Skill</option>
+                                        <option value="">Technical Topic</option>
                                         <option value="python">🐍 Python</option>
                                         <option value="javascript">⚡ JavaScript</option>
                                         <option value="react">⚛️ React</option>
@@ -317,11 +373,11 @@
                                         <option value="general">💬 General</option>
                                     </select>
                                     <select class="form-input form-select" id="postType" style="width:120px;">
-                                        <option value="share">💡 Tip</option>
+                                        <option value="share">💡 Discussion</option>
                                         <option value="question">❓ Question</option>
-                                        <option value="resource">🔗 Resource</option>
+                                        <option value="resource">🔗 Project Update</option>
                                     </select>
-                                    <button class="btn btn-primary btn-sm" onclick="createPost()">Post</button>
+                                    <button class="btn btn-primary btn-sm" onclick="createPost()">Post Thread</button>
                                 </div>
                             </div>
                         </div>
@@ -348,30 +404,29 @@
                 <div class="sidebar">
                     <div class="sidebar-card">
                         <h4>🔥 Trending Topics</h4>
-                        <div class="topic-chip"><a onclick="searchByTopic('python')">🐍 Python Basics</a><span
-                                class="topic-count">124 posts</span></div>
-                        <div class="topic-chip"><a onclick="searchByTopic('react')">⚛️ React Hooks</a><span
-                                class="topic-count">98 posts</span></div>
-                        <div class="topic-chip"><a onclick="searchByTopic('machine_learning')">🤖 ML Projects</a><span
-                                class="topic-count">76 posts</span></div>
-                        <div class="topic-chip"><a onclick="searchByTopic('design')">🎨 UI Design Tips</a><span
-                                class="topic-count">62 posts</span></div>
-                        <div class="topic-chip"><a onclick="searchByTopic('javascript')">⚡ JS Interview Prep</a><span
-                                class="topic-count">55 posts</span></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('python')">🐍 Python Basics</a></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('react')">⚛️ React Hooks</a></div>
+                        <div class="topic-chip"><a onclick="searchByTopic('machine_learning')">🤖 ML Projects</a></div>
                     </div>
+                    
+                    <div class="sidebar-card">
+                        <h4>🏆 Top Contributors</h4>
+                        <div class="topic-chip"><span>Priya Sharma</span> <span class="badge badge-violet">520 XP</span></div>
+                        <div class="topic-chip"><span>Arjun Mehta</span> <span class="badge badge-violet">480 XP</span></div>
+                        <div class="topic-chip"><span>Sneha Patel</span> <span class="badge badge-violet">310 XP</span></div>
+                    </div>
+
                     <div class="sidebar-card">
                         <h4>📌 Community Rules</h4>
                         <ul
                             style="font-size:0.82rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:0.4rem;">
                             <li>✅ Be helpful and respectful</li>
                             <li>✅ Share verified knowledge</li>
-                            <li>✅ Ask specific questions</li>
                             <li>❌ No spam or self-promotion</li>
-                            <li>❌ No plagiarism</li>
                         </ul>
                     </div>
                     <a href="test.html" class="sidebar-card"
-                        style="display:block;text-align:center;cursor:pointer;border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.08);">
+                        style="display:block;text-align:center;cursor:pointer;border-color:var(--violet);background:rgba(124,58,237,0.05);box-shadow:var(--shadow-glow);">
                         <div style="font-size:2rem;margin-bottom:0.5rem;">🏅</div>
                         <strong>Get Verified!</strong>
                         <p style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.3rem;">Verified users get 3x
@@ -429,31 +484,41 @@
 
         function renderPost(p) {
             const timeAgo = getTimeAgo(p.created_at);
-            const typeIcons = { share: '💡', question: '❓', resource: '🔗' };
+            const votes = (p.upvotes || []).length;
+            const isUpvoted = user && (p.upvotes || []).includes(user.uid);
+            const tagsHtml = (p.tags || []).map(t => `<span class="tag-chip" onclick="searchByTopic('${t}')">${t.startsWith('#') ? t : '#' + t}</span>`).join('');
+            
             const repliesHtml = (p.replies || []).map(r =>
                 `<div class="reply-item"><div class="avatar" style="width:28px;height:28px;font-size:0.7rem;">${r.author.charAt(0)}</div><div class="reply-content"><strong>${r.author}:</strong> ${r.content}</div></div>`
             ).join('');
+
             return `
     <div class="post-card" id="post_${p.id}">
-      <div class="post-header">
-        <div class="avatar">${p.avatar || p.author.charAt(0)}</div>
-        <div class="post-meta">
-          <div class="post-author">${p.author} ${p.skill ? `<span class="badge badge-violet" style="margin-left:0.3rem;font-size:0.68rem;">${p.skill.replace('_', ' ')}</span>` : ''}</div>
-          <div class="post-time">${timeAgo} · ${typeIcons[p.type] || '💬'} ${p.type}</div>
+      <div class="voting-pillar">
+        <button class="vote-btn ${isUpvoted ? 'upvoted' : ''}" onclick="upvotePost('${p.id}', this)">▲</button>
+        <span class="vote-count">${votes}</span>
+        <button class="vote-btn" onclick="upvotePost('${p.id}', this)" style="transform:rotate(180deg)">▲</button>
+      </div>
+      <div class="post-main">
+        <div class="post-header">
+          <div class="avatar" style="width:20px;height:20px;font-size:0.6rem;">${p.avatar || (p.author || 'A').charAt(0)}</div>
+          <span>Posted by <strong>${p.author}</strong> in <span style="color:var(--violet-light)">${p.skill || 'General'}</span> · ${timeAgo}</span>
         </div>
-      </div>
-      <div class="post-title">${p.title}</div>
-      <div class="post-content">${p.content}</div>
-      <div class="post-footer">
-        <button class="post-action" onclick="likePost('${p.id}')">❤️ ${p.likes}</button>
-        <button class="post-action" onclick="toggleReplies('${p.id}')">💬 ${p.replies?.length || 0} Replies</button>
-      </div>
-      <div class="reply-section hidden" id="replies_${p.id}">
-        ${repliesHtml}
-        <div class="reply-input-row">
-          <div class="avatar" style="width:28px;height:28px;font-size:0.7rem;">${user ? (userProfile?.name || 'U').charAt(0) : 'U'}</div>
-          <input class="reply-input" id="replyInput_${p.id}" placeholder="Write a reply..." />
-          <button class="btn btn-primary btn-sm" onclick="submitReply('${p.id}')">Reply</button>
+        <div class="post-title">${p.title}</div>
+        <div class="post-content">${p.content}</div>
+        <div class="tag-row">${tagsHtml}</div>
+        <div class="post-footer">
+          <button class="post-action" onclick="toggleReplies('${p.id}')">💬 ${p.replies?.length || 0} Comments</button>
+          <button class="post-action" onclick="Toast.info('Sharing feature coming soon!')">🔗 Share</button>
+          <button class="post-action">🏳️ Report</button>
+        </div>
+        <div class="reply-section hidden" id="replies_${p.id}">
+          ${repliesHtml}
+          <div class="reply-input-row" style="margin-top:1.5rem;">
+            <div class="avatar" style="width:28px;height:28px;font-size:0.7rem;">${user ? (userProfile?.name || 'U').charAt(0) : 'U'}</div>
+            <input class="reply-input" id="replyInput_${p.id}" placeholder="What are your thoughts?" />
+            <button class="btn btn-primary btn-sm" onclick="submitReply('${p.id}')">Comment</button>
+          </div>
         </div>
       </div>
     </div>`;
@@ -463,32 +528,74 @@
             document.getElementById('replies_' + id).classList.toggle('hidden');
         }
 
-        function likePost(id) {
-            const post = allPosts.find(p => p.id === id);
-            if (post) { post.likes++; renderPosts(); }
+        async function upvotePost(id, btn) {
+            if (!user) { Toast.error('Please login to vote.'); return; }
+            
+            // Add animation class
+            if (btn) {
+                btn.classList.add('upvoted-pop');
+                setTimeout(() => btn.classList.remove('upvoted-pop'), 300);
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/skill-share/${id}/upvote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: user.uid })
+                });
+                const data = await res.json();
+                if (data.upvotes) {
+                    const post = allPosts.find(p => p.id === id);
+                    if (post) post.upvotes = data.upvotes;
+                    renderPosts();
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         async function createPost() {
             if (!user) { Toast.error('Please login to post.'); window.location.href = 'auth.html'; return; }
             const title = document.getElementById('postTitle').value.trim();
             const content = document.getElementById('postContent').value.trim();
+            const tagInput = document.getElementById('postTags').value.trim();
+            
             if (!title || !content) { Toast.error('Please add a title and content.'); return; }
+            
+            // Parse tags
+            const tags = tagInput ? tagInput.split(',').map(t => t.trim().replace(/^#/, '')) : [];
+            
             const post = {
-                id: 'p_' + Date.now(), author: userProfile?.name || user.email?.split('@')[0] || 'You',
+                author: userProfile?.name || user.email?.split('@')[0] || 'You',
                 avatar: (userProfile?.name || 'U').charAt(0).toUpperCase(),
-                skill: document.getElementById('postSkill').value,
+                uid: user.uid,
+                skill: document.getElementById('postSkill').value || 'General',
                 type: document.getElementById('postType').value,
-                title, content, likes: 0, replies: [],
+                title, content, tags,
                 created_at: new Date().toISOString()
             };
+            
             try {
-                await fetch(`${BACKEND_URL}/skill-share`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...post, uid: user.uid }) });
-            } catch { }
-            allPosts.unshift(post);
-            renderPosts();
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postContent').value = '';
-            Toast.success('Post shared with the community!');
+                const res = await fetch(`${BACKEND_URL}/skill-share`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(post) 
+                });
+                const savedPost = await res.json();
+                allPosts.unshift(savedPost);
+                
+                // Award coins for active participation
+                await SkillCoins.award(user.uid, 15, `Posted a new thread: ${title}`);
+                
+                renderPosts();
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+                document.getElementById('postTags').value = '';
+                Toast.success('Thread posted to the community!');
+            } catch (e) {
+                console.error(e);
+                Toast.error('Failed to post thread.');
+            }
         }
 
         async function submitReply(postId) {
