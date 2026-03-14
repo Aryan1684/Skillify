@@ -6,6 +6,7 @@ API Base: http://localhost:5000/api
 """
 
 import os
+import json
 import firebase_admin
 from firebase_admin import credentials
 from flask import Flask
@@ -20,14 +21,24 @@ app = Flask(__name__,
 CORS(app)
 
 # Initialize Firebase Admin SDK
-cred_path = os.path.join(os.path.dirname(__file__), 'serviceAccountKey.json')
+firebase_service_account = os.environ.get('FIREBASE_SERVICE_ACCOUNT')
+
 try:
-    if os.path.exists(cred_path):
-        cred = credentials.Certificate(cred_path)
+    if firebase_service_account:
+        # Initialize using environment variable (for Production/Railway)
+        service_account_info = json.loads(firebase_service_account)
+        cred = credentials.Certificate(service_account_info)
         firebase_admin.initialize_app(cred)
-        print("✅ Firebase Admin SDK initialized successfully.")
+        print("✅ Firebase Admin SDK initialized from environment variable.")
     else:
-        print(f"⚠️ Warning: '{cred_path}' not found. Firebase Admin not initialized (using demo mode).")
+        # Initialize using local file (for Development)
+        cred_path = os.path.join(os.path.dirname(__file__), 'serviceAccountKey.json')
+        if os.path.exists(cred_path):
+            cred = credentials.Certificate(cred_path)
+            firebase_admin.initialize_app(cred)
+            print("✅ Firebase Admin SDK initialized from local JSON file.")
+        else:
+            print("⚠️ Warning: Firebase credentials not found (Env mapping or JSON file). Using demo mode.")
 except Exception as e:
     print(f"❌ Error initializing Firebase Admin SDK: {e}")
 
