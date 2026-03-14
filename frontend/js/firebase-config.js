@@ -37,4 +37,4 @@ if (!IS_DEMO) {
   console.warn("🔵 Skillify running in DEMO MODE – Fill in firebase-config.js to enable real auth");
 }
 
-const BACKEND_URL = "http://localhost:5000/api";
+const BACKEND_URL = window.location.origin + "/api";

@@ -14,7 +14,9 @@ from routes.test_routes import test_bp
 from routes.skill_routes import skill_bp
 from routes.auth_routes import auth_bp
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='../frontend', 
+            static_url_path='')
 CORS(app)
 
 # Initialize Firebase Admin SDK
@@ -36,7 +38,11 @@ app.register_blueprint(auth_bp, url_prefix='/api')
 
 
 @app.route('/')
-def index():
+def serve_index():
+    return app.send_static_file('index.html')
+
+@app.route('/api/status')
+def api_status():
     return {
         "message": "Skillify API is running!",
         "version": "1.0.0-demo",
