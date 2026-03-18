@@ -9,7 +9,7 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from routes.test_routes import test_bp
 from routes.skill_routes import skill_bp
@@ -19,6 +19,11 @@ app = Flask(__name__,
             static_folder='../frontend', 
             static_url_path='')
 CORS(app)
+
+@app.before_request
+def check_maintenance():
+    if os.getenv("MAINTENANCE_MODE") == "true":
+        return "🚧 Skillify is under maintenance. Please try again later.", 503
 
 # Initialize Firebase Admin SDK
 firebase_service_account = os.environ.get('FIREBASE_SERVICE_ACCOUNT')
