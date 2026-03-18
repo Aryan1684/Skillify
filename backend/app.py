@@ -23,7 +23,18 @@ CORS(app)
 @app.before_request
 def check_maintenance():
     if os.getenv("MAINTENANCE_MODE") == "true":
-        return "🚧 Skillify is under maintenance. Please try again later.", 503
+        # Allow status check even in maintenance (optional)
+        if request.path == "/api/status":
+            return None
+
+        # If API request → return JSON
+        if request.path.startswith('/api'):
+            return {
+                "error": "🚧 Skillify is under maintenance. Please try again later."
+            }, 503
+
+        # If frontend request → show maintenance page
+        return app.send_static_file('maintenance.html'), 503
 
 # Initialize Firebase Admin SDK
 firebase_service_account = os.environ.get('FIREBASE_SERVICE_ACCOUNT')
