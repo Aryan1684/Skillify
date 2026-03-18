@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skillify - Maintenance</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --bg-dark: #0f172a;
+            --text-light: #f8fafc;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Background */
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(45deg, var(--bg-dark), #1e1b4b, var(--bg-dark));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            animation: float 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* Glassmorphism Card */
+        .maintenance-card {
+            position: relative;
+            z-index: 10;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 4rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo */
+        .logo-container {
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .logo-container img {
+            height: 52px;
+            width: auto;
+            filter: drop-shadow(0 4px 16px rgba(99, 102, 241, 0.5)) brightness(1.15);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .brand {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <ul class="circles">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <div class="maintenance-card">
+        <div class="logo-container">
+            <img src="logo.png" alt="Skillify Logo" />
+        </div>
+        <h1>We'll be right back!</h1>
+        <p><span class="brand">Skillify</span> is currently undergoing scheduled maintenance to improve your experience. Please check back soon.</p>
+    </div>
+</body>
+</html>
