@@ -83,6 +83,18 @@ def api_status():
         }
     }
 
+@app.route('/api/config/firebase')
+def config_firebase():
+    return {
+        "apiKey": os.environ.get("FIREBASE_API_KEY"),
+        "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN"),
+        "projectId": os.environ.get("FIREBASE_PROJECT_ID"),
+        "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET"),
+        "messagingSenderId": os.environ.get("FIREBASE_MESSAGING_SENDER_ID"),
+        "appId": os.environ.get("FIREBASE_APP_ID"),
+        "measurementId": os.environ.get("FIREBASE_MEASUREMENT_ID")
+    }
+
 
 if __name__ == '__main__':
     print("🚀 Skillify API starting on http://localhost:5000")
