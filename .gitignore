@@ -1,6 +1,9 @@
 # ⚠️ NEVER commit your Firebase secret key!
 serviceAccountKey.json
 
+# Firebase config with real credentials (use firebase-config.js.template as a reference)
+frontend/js/firebase-config.js
+
 # Python
 __pycache__/
 *.py[cod]
